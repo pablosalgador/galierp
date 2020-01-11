@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+{% block title %}{% trans %}Iniciar Sesión{% endtrans %}{% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{asset('css/login.css')}}">
+{% endblock %}
+{% block body %}
+<style>
+.bg-login-image{
+  background-image:url("{{asset('img/abstract.jpg')}}");
+}
+</style>
+<div class="container">
+    <div class="row justify-content-center">
+      <div class="col-xl-10 col-lg-12 col-md-9">
+        <div class="card o-hidden border-0 shadow-lg my-5">
+          <div class="card-body p-0">
+            <div class="row">
+              <div class="col-lg-6 d-none d-lg-block bg-login-image">
+                <h1 class="h1 text-light text-center mt-5 font-weight-bold">GaliERP</h1>
+              </div>
+              <div class="col-lg-6">
+                <div class="p-5">
+                  <div class="text-center">
+                    <span class="h4 text-gray-900 mb-4 d-lg-none font-weight-bold">GaliERP</span>
+                    <h2 class="h4 text-gray-900 mb-4">{% trans %}Iniciar Sesión{% endtrans %}</h2>
+                  </div>
+                    {% if app.user %}
+                        <div class="checkbox mb-3">{% trans %}Has iniciado sesión como {% endtrans %}: <b>{{ app.user.username }}</b>, <a href="{{ path('app_logout') }}">{% trans %}Cerrar Sesión{% endtrans %}</a>
+                    {% else %}
+                      <form method="post" class="user">
+
+                        {% if error %}
+                            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                        {% endif %}
+                          <div class="form-group">
+                            <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control form-control-user" placeholder="Dirección de Email" required autofocus>
+                          </div>
+                          <div class="form-group">
+                            <input type="password" name="password" id="inputPassword" class="form-control form-control-user"  placeholder="{% trans %}Password{% endtrans %}" required>
+                          </div>
+                          <input type="hidden" name="_csrf_token"
+                                 value="{{ csrf_token('authenticate') }}"
+                          >
+                          <div class="form-group">
+                            <div class="custom-control custom-checkbox small">
+                              <input type="checkbox" class="custom-control-input" name="_remember_me" id="recordarme">
+                              <label class="custom-control-label" for="recordarme">{% trans %}Recordar mis credenciales{% endtrans %}</label>
+                            </div>
+                          </div>
+                          <button class="btn btn-primary btn-user btn-block" type="submit">
+                              {% trans %}Iniciar Sesión{% endtrans %}
+                          </button>
+                          <hr>
+                          <!--div class="text-center">
+                            <a class="small" href="forgot-password.html">Recuperación de contraseña</a>
+                          </div-->
+                        </form>
+                      {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

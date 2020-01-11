@@ -1,0 +1,37 @@
+
+<!-- Heading -->
+<div class="sidebar-heading">
+  Administrador
+</div>
+
+<!-- Nav Item - Pages Collapse Menu -->
+<li class="nav-item">
+  <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#navusuarios" aria-expanded="true" aria-controls="navusuarios">
+    <i class="fas fa-fw fa-user"></i>
+    <span>Usuarios</span>
+  </a>
+  <div id="navusuarios" class="collapse" aria-labelledby="navusuarios" data-parent="#accordionSidebar">
+    <div class="bg-white py-2 collapse-inner rounded">
+      <h6 class="collapse-header">{% trans %}Gestión de usuarios{% endtrans %}</h6>
+      <a class="collapse-item" href="{{path("listausuarios")}}"><i class="fas fa-fw fa-users"></i> &nbsp;{% trans %}Ver Lista{% endtrans %}</a>
+      <a class="collapse-item" href="{{path("nuevousuario")}}"><i class="fas fa-fw fa-user-plus"></i> &nbsp;{% trans %}Añadir Nuevo{% endtrans %}</a>
+    </div>
+  </div>
+</li>
+
+<!-- Nav Item - Utilities Collapse Menu -->
+<li class="nav-item">
+  <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#navopciones" aria-expanded="true" aria-controls="navopciones">
+    <i class="fas fa-fw fa-cog"></i>
+    <span>Configuración</span>
+  </a>
+  <div id="navopciones" class="collapse" aria-labelledby="navopciones" data-parent="#accordionSidebar">
+    <div class="bg-white py-2 collapse-inner rounded">
+      <h6 class="collapse-header">{% trans %}Gestión de la aplicación{% endtrans %}</h6>
+        <a class="collapse-item" href="#"><i class="fas fa-fw fa-puzzle-piece"></i>&nbsp;Módulos</a>
+    </div>
+  </div>
+</li>
+
+<!-- Divider -->
+<hr class="sidebar-divider d-none d-md-block">

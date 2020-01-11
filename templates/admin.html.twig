@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+  <link rel="stylesheet" href="{{asset('css/admin.css')}}">
+{% endblock %}
+{% block body %}
+<div id="wrapper">
+<!-- Navbar Left -->
+{% include 'nav/navbar.html.twig' %}
+<div id="content-wrapper" class="d-flex flex-column">
+  <div id="content">
+    {% include 'nav/topbar.html.twig' %}
+    <div class="container-fluid">
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+  {% include 'nav/footer.html.twig' %}
+</div>
+{% endblock %}

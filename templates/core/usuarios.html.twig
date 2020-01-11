@@ -1,0 +1,60 @@
+{% extends 'admin.html.twig' %}
+{% block stylesheets %}
+{{parent()}}
+  <link href="{{asset('vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
+{% endblock %}
+{% block javascripts %}
+{{parent()}}
+<script src="{{asset('vendor/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('vendor/datatables/dataTables.bootstrap4.min.js')}}"></script>
+<script>
+$("#tablaUsuarios").dataTable({"order":[[ 0, "desc"]],"language":{"url":"{{asset('vendor/datatables/')}}{{ app.request.locale }}.json"}})
+</script>
+{% endblock %}
+{% block content %}
+  <h1 class="h1 mb-2 font-weight-bold text-gray-800"><i class="fas fa-fw fa-user"></i> &nbsp;{% trans %}Lista de usuarios{% endtrans %}</h1>
+<hr/>
+  <a href="{{path('nuevousuario')}}" class="btn btn-primary btn-icon-split mb-3">
+    <span class="icon text-white-50">
+      <i class="fas fa-plus"></i>
+    </span>
+    <span class="text">{% trans %}Añadir Nuevo{% endtrans %}</span>
+  </a>
+
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">{% trans %}Usuarios registrados{% endtrans %}</h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="tablaUsuarios" width="100%" cellspacing="0">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>{% trans %}Nombre completo{% endtrans %}</th>
+              <th>{% trans %}Email{% endtrans %}</th>
+              <th class="text-center">S. Admin.</th>
+              <th class="text-center">Admin.</th>
+              <th class="text-center">{% trans %}Opciones{% endtrans %}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for usuario in usuarios %}
+            <tr>
+              <td>{{usuario.id}}</td>
+              <td>{{usuario.nombre}} {{usuario.apellidos}}</td>
+              <td>{{usuario.email}}</td>
+              <td class="text-center">{% if 'ROLE_SUPER_ADMIN' in usuario.roles %}<i class="fa fa-check text-success"></i>{% endif %}</td>
+              <td class="text-center">{% if 'ROLE_ADMIN' in usuario.roles %}<i class="fa fa-check text-success"></i>{% endif %}</td>
+              <td class="text-center">
+                  <a href="{{path("vereditarusuario",{"id":usuario.id})}}" class="btn btn-primary btn-icon-split btn-sm"><span class="icon text-white"><i class="fas fa-fw fa-eye"></i></span><span class="text">{% trans %}Ver{% endtrans %}</span></a>
+
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+{% endblock %}

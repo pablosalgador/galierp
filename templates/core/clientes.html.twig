@@ -1,0 +1,68 @@
+{% extends 'admin.html.twig' %}
+{% block stylesheets %}
+{{parent()}}
+  <link href="{{asset('vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
+{% endblock %}
+{% block javascripts %}
+{{parent()}}
+<script src="{{asset('vendor/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('vendor/datatables/dataTables.bootstrap4.min.js')}}"></script>
+<script>
+$("#tablaClientes").dataTable({"order":[[ 0, "desc"]],"language":{"url":"{{asset('vendor/datatables/')}}{{ app.request.locale }}.json"}})
+</script>
+{% endblock %}
+{% block content %}
+  <h1 class="h1 mb-2 font-weight-bold text-gray-800"><i class="fas fa-fw fa-user-tie"></i> &nbsp;{% trans %}Lista de clientes{% endtrans %}</h1>
+<hr/>
+  <a href="{{path('nuevocliente')}}" class="btn btn-primary btn-icon-split mb-3">
+    <span class="icon text-white-50">
+      <i class="fas fa-plus"></i>
+    </span>
+    <span class="text">{% trans %}Añadir Nuevo{% endtrans %}</span>
+  </a>
+
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">{% trans %}Clientes registrados{% endtrans %}</h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="tablaClientes" width="100%" cellspacing="0">
+          <thead>
+            <tr>
+              <th class="d-none">ID</th>
+              <th>{% trans %}NIF{% endtrans %}</th>
+              <th>{% trans %}Nombre Comercial{% endtrans %}</th>
+              <th>{% trans %}País{% endtrans %}</th>
+              <th>{% trans %}Persona de contacto{% endtrans %}</th>
+              <th>{% trans %}Email{% endtrans %}</th>
+              <th>{% trans %}Teléfono{% endtrans %}</th>
+              <th class="text-center">{% trans %}Opciones{% endtrans %}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for cliente in clientes %}
+            {{ (cliente.fechabaja is null) ? '<tr>' : '<tr class="bg-warning">' }}
+              <td class="d-none">{{cliente.id}}</td>
+              <td>{{cliente.nif}}</td>
+              <td>{{cliente.nombrecomercial}}</td>
+              <td>{{cliente.pais}}</td>
+              <td>{{cliente.personacontacto}}</td>
+              <td>  <a href="mailto:{{cliente.email}}" class="btn btn-info btn-icon-split btn-sm"><span class="icon text-white"><i class="fas fa-fw fa-at"></i></span><span class="text">{{cliente.email}}</span></a></td>
+              <td>  <a href="tel:{{cliente.telefono}}" class="btn btn-info btn-icon-split btn-sm"><span class="icon text-white"><i class="fas fa-fw fa-phone"></i></span><span class="text">{{cliente.telefono}}</span></a></td>
+              <td class="text-center">
+                <a href="{{path("vereditarcliente",{"id":cliente.id})}}" class="btn btn-primary btn-icon-split btn-sm"><span class="icon text-white"><i class="fas fa-fw fa-eye"></i></span><span class="text">{% trans %}Ver{% endtrans %}</span></a>
+                {% if cliente.fechabaja is null %}
+                  <a href="{{path("bajacliente",{"id":cliente.id})}}" class="btn btn-danger btn-icon-split btn-sm"><span class="icon text-white"><i class="fas fa-fw fa-times"></i></span><span class="text">{% trans %}Baja{% endtrans %}</span></a>
+                {% else %}
+                  <a href="{{path("altacliente",{"id":cliente.id})}}" class="btn btn-success btn-icon-split btn-sm"><span class="icon text-white"><i class="fas fa-fw fa-check"></i></span><span class="text">{% trans %}Alta{% endtrans %}</span></a>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+{% endblock %}

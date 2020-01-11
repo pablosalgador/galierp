@@ -1,0 +1,151 @@
+{% extends 'admin.html.twig' %}
+{% block content %}
+<h1 class="h1 mb-2 font-weight-bold text-gray-800"><i class="fas fa-fw fa-user-tie"></i> &nbsp;{% trans %}Nuevo Cliente{% endtrans %}</h1>
+<hr/>
+{% for msg in msg_success %}
+<div class="alert alert-success border-bottom-success font-weight-bold"><i class="fa fa-check fa-fw"></i> &nbsp;{{msg}}</div>
+{% endfor %}
+<div class="card shadow ">
+
+  {{ form_start(form, {attr: {class: 'user'} }) }}
+  {{ form_errors(form) }}
+
+  <!-- Header: Datos de facturación -->
+  <div class="card-header">
+    <h6 class="m-0 font-weight-bold text-primary">{% trans %}Datos de Facturación{% endtrans %}</h6>
+  </div><!-- END Header: Datos de facturación -->
+
+  <!-- Body: Datos de facturación -->
+  <div class="card-body">
+    <div class="row">
+
+      <!-- Nombre Comercial -->
+      <div class="col-md-12">
+        <div class="form-group">
+          <label for="cliente_form_nombre_comercial" class="h6 text-uppercase font-weight-bold text-gray-900"><i class="fas fa-fw fa-building"></i> &nbsp;{% trans %}Nombre Comercial{% endtrans %}</label>
+          {{form_widget(form.nombre_comercial, {attr:{class:'form-control'}})}}
+        </div>
+      </div><!-- END Nombre Comercial -->
+
+      <!-- Razon social -->
+      <div class="col-md-8">
+        <div class="form-group">
+          <label for="cliente_form_razon_social" class="h6 text-uppercase font-weight-bold text-gray-900"><i class="fas fa-fw fa-building"></i> &nbsp;{% trans %}Razón Social{% endtrans %}</label>
+          {{form_widget(form.razon_social, {attr:{class:'form-control'}})}}
+        </div>
+      </div><!-- END Razon social -->
+
+      <!-- CIF/NIF -->
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="cliente_form_nif" class="h6 text-uppercase font-weight-bold text-gray-900"><i class="fas fa-fw fa-id-card"></i> &nbsp;{% trans %}NIF/CIF{% endtrans %}</label>
+          {{form_widget(form.nif, {attr:{class:'form-control'}})}}
+        </div>
+      </div><!-- END CIF/NIF -->
+
+      <!-- Dirección -->
+      <div class="col-md-8">
+        <div class="form-group">
+          <label for="cliente_form_direccion" class="h6 text-uppercase font-weight-bold text-gray-900"><i class="fas fa-fw fa-map-marked-alt"></i> &nbsp;{% trans %}Dirección{% endtrans %}</label>
+          {{form_widget(form.direccion, {attr:{class:'form-control'}})}}
+        </div>
+      </div><!-- END Dirección -->
+
+      <!-- Codigo Postal -->
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="cliente_form_codigo_postal" class="h6 text-uppercase font-weight-bold text-gray-900"><i class="fas fa-fw fa-map-marked-alt"></i> &nbsp;{% trans %}Código Postal{% endtrans %}</label>
+          {{form_widget(form.codigo_postal, {attr:{class:'form-control'}})}}
+        </div>
+      </div><!-- END Codigo Postal -->
+
+      <!-- Localidad -->
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="cliente_form_localidad" class="h6 text-uppercase font-weight-bold text-gray-900"><i class="fas fa-fw fa-map-marked-alt"></i> &nbsp;{% trans %}Localidad{% endtrans %}</label>
+          {{form_widget(form.localidad, {attr:{class:'form-control'}})}}
+        </div>
+      </div><!-- END Localidad -->
+
+      <!-- Provincia -->
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="cliente_form_provincia" class="h6 text-uppercase font-weight-bold text-gray-900"><i class="fas fa-fw fa-map-marked-alt"></i> &nbsp;{% trans %}Provincia{% endtrans %}</label>
+          {{form_widget(form.provincia, {attr:{class:'form-control'}})}}
+        </div>
+      </div><!-- END Provincia -->
+
+      <!-- País -->
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="cliente_form_pais" class="h6 text-uppercase font-weight-bold text-gray-900"><i class="fas fa-fw fa-globe-europe"></i> &nbsp;{% trans %}País{% endtrans %}</label>
+          {{form_widget(form.pais, {attr:{class:'form-control'}})}}
+        </div>
+      </div><!-- END País -->
+
+    </div><!-- END .row -->
+  </div><!-- END Body: Datos de facturación -->
+
+  <!-- Header: Datos de contacto -->
+  <div class="card-header border-top">
+    <h6 class="m-0 font-weight-bold text-primary">Datos de Contacto</h6>
+  </div><!-- END Header: Datos de contacto -->
+
+  <!-- Body: Datos de contacto -->
+  <div class="card-body">
+    <div class="row">
+
+    <!-- Persona de contacto -->
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="cliente_form_persona_contacto" class="h6 text-uppercase font-weight-bold text-gray-900"><i class="fas fa-fw fa-user-tag"></i> &nbsp;{% trans %}Persona de contacto{% endtrans %}</label>
+          {{form_widget(form.persona_contacto, {attr:{class:'form-control'}})}}
+        </div>
+      </div><!-- END Persona de contacto -->
+
+      <!-- Teléfono -->
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="cliente_form_telefono" class="h6 text-uppercase font-weight-bold text-gray-900"><i class="fas fa-fw fa-phone"></i> &nbsp;{% trans %}Teléfono{% endtrans %}</label>
+          {{form_widget(form.telefono, {attr:{class:'form-control'}})}}
+        </div>
+      </div><!-- END Teléfono -->
+
+      <!-- Email -->
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="cliente_form_email" class="h6 text-uppercase font-weight-bold text-gray-900"><i class="fas fa-fw fa-envelope-open-text"></i> &nbsp;{% trans %}Email{% endtrans %}</label>
+          {{form_widget(form.email, {attr:{class:'form-control'}})}}
+        </div>
+      </div><!-- END Email -->
+
+      <!-- Web -->
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="cliente_form_web" class="h6 text-uppercase font-weight-bold text-gray-900"><i class="fas fa-fw fa-globe"></i> &nbsp;{% trans %}Web{% endtrans %}</label>
+          {{form_widget(form.web, {attr:{class:'form-control'}})}}
+        </div>
+      </div><!-- End Web-->
+
+      <!-- Comentarios -->
+      <div class="col-md-12">
+        <div class="form-group">
+          <label for="cliente_form_comentarios" class="h6 text-uppercase font-weight-bold text-gray-900"><i class="fas fa-fw fa-pencil-alt"></i> &nbsp;{% trans %}Comentarios{% endtrans %}</label>
+          {{form_widget(form.comentarios, {attr:{class:'form-control'}})}}
+        </div>
+      </div><!-- END Comentarios -->
+
+    </div><!-- END .row -->
+
+    <div class="row">
+      <div class="col-sm-6">{{form_widget(form.save, {attr:{class:'btn btn-primary btn-lg btn-block'}})}}</div>
+      <div class="col-sm-6"><a href="{{path("listaclientes")}}" class="btn btn-danger btn-block text-white btn-lg">{% trans %}Cancelar{% endtrans %}</a></div>
+    </div>
+
+  </div><!-- END Body: Datos de contacto -->
+  {{ form_widget(form) }}
+  {{ form_end(form) }}
+
+</div><!-- END: .card .shadow-->
+
+{% endblock %}
