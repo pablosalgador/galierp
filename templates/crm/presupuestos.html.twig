@@ -1,0 +1,61 @@
+{% extends 'admin.html.twig' %}
+{% block stylesheets %}
+{{parent()}}
+  <link href="{{asset('vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
+{% endblock %}
+{% block javascripts %}
+{{parent()}}
+<script src="{{asset('vendor/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('vendor/datatables/dataTables.bootstrap4.min.js')}}"></script>
+<script>
+$("#tablaPresupuestos").dataTable({"order":[[ 0, "desc"]],"language":{"url":"{{asset('vendor/datatables/')}}{{ app.request.locale }}.json"}})
+</script>
+{% endblock %}
+{% block content %}
+  <h1 class="h1 mb-2 font-weight-bold text-gray-800"><i class="fas fa-fw fa-user-tie"></i> &nbsp;{% trans %}Lista de presupuestos{% endtrans %}</h1>
+<hr/>
+  <a href="{{path('nuevo_presupuesto')}}" class="btn btn-primary btn-icon-split mb-3">
+    <span class="icon text-white-50">
+      <i class="fas fa-plus"></i>
+    </span>
+    <span class="text">{% trans %}Añadir Nuevo{% endtrans %}</span>
+  </a>
+
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">{% trans %}Presupuestos{% endtrans %}</h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="tablaPresupuestos" width="100%" cellspacing="0">
+          <thead>
+            <tr>
+              <th>{% trans %}Fecha Emisión{% endtrans %}</th>
+              <th>{% trans %}Número{% endtrans %}</th>
+              <th>{% trans %}Cliente{% endtrans %}</th>
+              <th>{% trans %}Dias validez{% endtrans %}</th>
+              <th>{% trans %}Oportunidad Venta{% endtrans %}</th>
+              <th>{% trans %}Total{% endtrans %}</th>
+              <th class="text-center">{% trans %}Opciones{% endtrans %}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for presupuesto in presupuestos %}
+            <tr>
+              <td>{{presupuesto.fechaEmision | date('d/m/Y')}}</td>
+              <td>{{presupuesto.numeroPresupuesto}}</td>
+              <td>{{presupuesto.cliente.nombrecomercial}}</td>
+              <td>{{presupuesto.diasValidez}}</td>
+              <td>{{ (presupuesto.oportunidadVenta is not null) ? (presupuesto.oportunidadVenta.nombre)  : '-' }}</td>
+              <td>{{presupuesto.total | number_format(2)}} €</td>
+              <td class="text-center">
+                <a href="{{path("ver_editar_presupuesto",{"id":presupuesto.id})}}" class="btn btn-primary btn-icon-split btn-sm"><span class="icon text-white"><i class="fas fa-fw fa-eye"></i></span><span class="text">{% trans %}Ver{% endtrans %}</span></a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+{% endblock %}

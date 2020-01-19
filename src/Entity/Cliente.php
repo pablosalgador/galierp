@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -85,6 +87,22 @@ class Cliente
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $fecha_baja;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\OportunidadVenta", mappedBy="cliente", orphanRemoval=true)
+     */
+    private $oportunidadesVentas;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Presupuesto", mappedBy="cliente", orphanRemoval=true)
+     */
+    private $presupuestos;
+
+    public function __construct()
+    {
+        $this->oportunidadesVentas = new ArrayCollection();
+        $this->presupuestos = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -255,6 +273,68 @@ class Cliente
     public function setFechaBaja(?\DateTimeInterface $fecha_baja): self
     {
         $this->fecha_baja = $fecha_baja;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|OportunidadVenta[]
+     */
+    public function getOportunidadesVentas(): Collection
+    {
+        return $this->oportunidadesVentas;
+    }
+
+    public function addOportunidadesVenta(OportunidadVenta $oportunidadesVenta): self
+    {
+        if (!$this->oportunidadesVentas->contains($oportunidadesVenta)) {
+            $this->oportunidadesVentas[] = $oportunidadesVenta;
+            $oportunidadesVenta->setCliente($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOportunidadesVenta(OportunidadVenta $oportunidadesVenta): self
+    {
+        if ($this->oportunidadesVentas->contains($oportunidadesVenta)) {
+            $this->oportunidadesVentas->removeElement($oportunidadesVenta);
+            // set the owning side to null (unless already changed)
+            if ($oportunidadesVenta->getCliente() === $this) {
+                $oportunidadesVenta->setCliente(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Presupuesto[]
+     */
+    public function getPresupuestos(): Collection
+    {
+        return $this->presupuestos;
+    }
+
+    public function addPresupuesto(Presupuesto $presupuesto): self
+    {
+        if (!$this->presupuestos->contains($presupuesto)) {
+            $this->presupuestos[] = $presupuesto;
+            $presupuesto->setCliente($this);
+        }
+
+        return $this;
+    }
+
+    public function removePresupuesto(Presupuesto $presupuesto): self
+    {
+        if ($this->presupuestos->contains($presupuesto)) {
+            $this->presupuestos->removeElement($presupuesto);
+            // set the owning side to null (unless already changed)
+            if ($presupuesto->getCliente() === $this) {
+                $presupuesto->setCliente(null);
+            }
+        }
 
         return $this;
     }

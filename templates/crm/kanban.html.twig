@@ -1,0 +1,128 @@
+{% extends 'admin.html.twig' %}
+{% block content %}
+<h1 class="h1 mb-2 font-weight-bold text-gray-800"><i class="fas fa-fw fa-columns"></i> &nbsp;{% trans %}Panel de Oportunidades{% endtrans %}</h1>
+<hr/>
+<div class="row">
+  <div class="col-md-12">
+    <div id="panel_oportunidades_kanban"></div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+      <hr>
+      <a data-toggle="collapse" id="btn-nueva-oportunidad" href="#nueva-oportunidad-form" role="button" class="btn btn-primary btn-icon-split btn-lg">
+        <span class="icon text-white-50">
+          <i class="fas fa-plus"></i>
+        </span>
+        <span class="text">{% trans %}Nueva Oportunidad Venta{% endtrans %}</span>
+      </a>
+
+      <a data-toggle="collapse" id="btn-nueva-columna" href="#nuevo-tablero-form" role="button" class="btn btn-info btn-icon-split btn-lg">
+        <span class="icon text-white-50">
+          <i class="fas fa-plus"></i>
+        </span>
+        <span class="text">{% trans %}Nuevo Tablero{% endtrans %}</span>
+      </a>
+
+
+      <div id="nueva-oportunidad-form" class="collapse card mt-4 bg-gray-200 border-left-primary p-4">
+        {{form(formoportunidad)}}
+      </div>
+
+      <div id="nuevo-tablero-form" class="collapse card mt-4 bg-gray-200 border-left-info p-4">
+        {{form(formcolumna)}}
+      </div>
+
+  </div>
+</div>
+
+
+{% endblock %}
+
+{% block stylesheets %}<link rel="stylesheet" href="{{asset('vendor/jkanban/jkanban.css')}}">{% endblock %}
+
+{% block javascripts %}
+<script src='https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.2/dragula.min.js'></script>
+<script src="{{asset('vendor/jkanban/jkanban.js')}}"></script>
+<script src="{{asset('js/panelOportunidades.js')}}"></script>
+<script>
+
+var ajax_kanban_columns_url = '{{path("ajax_kanban_columns")}}';
+var ajax_kanban_columns_order_url = '{{path("ajax_kanban_columns_order")}}';
+var ajax_kanban_columns_move_item_url = '{{path("ajax_kanban_columns_move_item")}}';
+var ver_editar_oportunidad_venta_url = '{{absolute_url("oportunidad")}}';
+var ver_editar_columna_kanban_url = '{{absolute_url('columna')}}';
+var nuevo_presupuesto_url = '{{path("nuevo_presupuesto")}}';
+var ver_editar_presupuesto_url = '{{absolute_url("presupuesto")}}';
+var texto_traducido = {'eliminar_columna': '{% trans %}Eliminar Columna{% endtrans %}' ,'estas_seguro':'{% trans %} ¿Estás seguro que deseas eliminar esta columna? {% endtrans %}','cancelar':'{% trans %}Cancelar{% endtrans %}'};
+
+var panel_oportunidades;
+$(document).ready(function(){
+
+    //Solo un formulario visible a la vez
+    $("#btn-nueva-oportunidad").click(function(){$(".collapse").collapse('hide');});
+    $("#btn-nueva-columna").click(function(){$(".collapse").collapse('hide');});
+
+    //Obtenemos columnas por ajax y creamos PanelOportunidades
+    $.get(ajax_kanban_columns_url,"",function(data){
+        panel_oportunidades = new PanelOportunidades(
+          data,
+          "#panel_oportunidades_kanban",
+          ajax_kanban_columns_order_url,
+          ajax_kanban_columns_move_item_url,
+          ver_editar_oportunidad_venta_url,
+          ver_editar_presupuesto_url,
+          nuevo_presupuesto_url
+        );
+        //$(".kanban-item > div > a").click(function(e){ e.stopPropagation();});
+        $(".kanban-item > div > div").click(function(e){ e.stopPropagation();});
+        addDescripcionColumna();
+    });
+
+    //Añadir descripción a columnas
+    function addDescripcionColumna()
+    {
+      $(".kanban-board").each(function(){
+
+        var id = $(this).data('id').replace('column-','');
+        var ele = panel_oportunidades.data.find(x => x.id == id);
+
+        //var html = '<div class="columna-descripcion">' + ele.descripcion + '<hr><a href="#" class="btn btn-primary btn-circle btn-sm"><i class="fa fa-edit fa-fw"></i></a><a href="#" class="ml-1 btn btn-danger btn-circle btn-sm"><i class="fa fa-times fa-fw"></i></a></div>';
+        var totalestimadocolumna = 0;
+        for(var i=0; i<ele.oportunidades.length; i++){
+          totalestimadocolumna += (parseFloat(ele.oportunidades[i].ingresoEstimado) * parseFloat(ele.oportunidades[i].porcentajeExitoEstimado));
+        }
+
+        var html = `
+        <div class="columna-descripcion">` + ele.descripcion + `</div><hr>
+          <div class="columna-opciones"><span class="p-2 badge badge-success">` + Math.round(totalestimadocolumna*100)/100 + ` €</span>
+            <button data-toggle="modal" data-target="#modal-eliminar-columna-` + id + `" class="ml-1 float-right btn btn-danger btn-circle btn-sm"><i class="fa fa-times fa-fw"></i></button>
+            <a href="` + ver_editar_columna_kanban_url + '/' + id + `" class="ml-1 float-right btn btn-primary btn-circle btn-sm"><i class="fa fa-edit fa-fw"></i></a>
+            <div class="modal fade" id="modal-eliminar-columna-` + id + `" tabindex="-1" role="dialog" aria-labelledby="modal-eliminar-columna` + id + `" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content" style="text-transform:none">
+                  <div class="modal-header">
+                    <h5 class="modal-title text-danger">` + texto_traducido.eliminar_columna + `</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body text-danger">
+                    ` + texto_traducido.estas_seguro + `<br><i class="text-secondary">(No se podrá eliminar si contiene oportunidades)</i>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">` + texto_traducido.cancelar + `</button>
+                    <a href="` + ver_editar_columna_kanban_url + '/' + id + '/eliminar' + `" class="btn btn-danger">` + texto_traducido.eliminar_columna +  `</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        `;
+        $(this).find('.kanban-title-board').after(html)
+      })
+    }
+});
+</script>
+{% endblock %}

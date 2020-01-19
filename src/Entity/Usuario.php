@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -43,6 +45,16 @@ class Usuario implements UserInterface
      * @ORM\Column(type="string", length=255)
      */
     private $apellidos;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\OportunidadVenta", mappedBy="responsable")
+     */
+    private $oportunidadesVentas;
+
+    public function __construct()
+    {
+        $this->oportunidadesVentas = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -142,6 +154,37 @@ class Usuario implements UserInterface
     public function setApellidos(string $apellidos): self
     {
         $this->apellidos = $apellidos;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|OportunidadVenta[]
+     */
+    public function getOportunidadesVentas(): Collection
+    {
+        return $this->oportunidadesVentas;
+    }
+
+    public function addOportunidadesVenta(OportunidadVenta $oportunidadesVenta): self
+    {
+        if (!$this->oportunidadesVentas->contains($oportunidadesVenta)) {
+            $this->oportunidadesVentas[] = $oportunidadesVenta;
+            $oportunidadesVenta->setResponsable($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOportunidadesVenta(OportunidadVenta $oportunidadesVenta): self
+    {
+        if ($this->oportunidadesVentas->contains($oportunidadesVenta)) {
+            $this->oportunidadesVentas->removeElement($oportunidadesVenta);
+            // set the owning side to null (unless already changed)
+            if ($oportunidadesVenta->getResponsable() === $this) {
+                $oportunidadesVenta->setResponsable(null);
+            }
+        }
 
         return $this;
     }

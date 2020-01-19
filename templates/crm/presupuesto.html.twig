@@ -1,0 +1,155 @@
+{% import _self as formMacros %}
+{% macro printLineaPresupuestoRow(lineaForm) %}
+    <div class="row mt-3 js-linea-presupuesto-row">
+      <div class="col-md-5">{{form_widget(lineaForm.concepto)}}</div>
+      <div class="col-md-1">{{form_widget(lineaForm.cantidad, { 'attr': {'class': 'make-subtotal-change'} })}}</div>
+      <div class="col-md-1">{{form_widget(lineaForm.precio, { 'attr': {'class': 'make-subtotal-change'} })}}</div>
+      <div class="col-md-1">{{form_widget(lineaForm.descuento, { 'attr': {'class': 'make-subtotal-change'} })}}</div>
+      <div class="col-md-1">{{form_widget(lineaForm.iva, { 'attr': {'class': 'make-subtotal-change'} })}}</div>
+      <div class="col-md-2 text-right"><h3><span class="p-2 badge badge-info subtotal-linea" data-id-linea="{{lineaForm.vars.id}}"></span></h3></div>
+      <div class="col-md-1"><a href="javascript:void(0);" class="btn btn-circle btn-danger btn-eliminar-concepto"><i class="fa fa-times"></i></a></div>
+    </div>
+{% endmacro %}
+{% extends 'admin.html.twig' %}
+{% block content %}
+<h1 class="h3 mb-2 font-weight-bold text-gray-800"><i class="fas fa-fw fa-columns"></i> &nbsp;Presupuesto</h1>
+<hr/>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="bg-white p-4" style="border:2px solid #36b9cc">
+        <div style="border: 2px dotted black;" class="bg-info text-center text-white p-4 mb-4"><h2><i class="fa fa-info-circle"></i> &nbsp;Información del presupuesto</h2></div>
+        {% form_theme form 'bootstrap_4_layout.html.twig' %}
+        {{ form_start(form) }}
+        <div class="row">
+          <div class="col-md-4">{{ form_row(form.numero_presupuesto)}}</div>
+          <div class="col-md-4">{{ form_row(form.fecha_emision)}}</div>
+          <div class="col-md-4">{{ form_row(form.dias_validez)}}</div>
+          <div class="col-md-6">{{ form_row(form.cliente)}}</div>
+          <div class="col-md-6">{{ form_row(form.oportunidadVenta)}}</div>
+        </div>
+
+        <div style="border: 2px dotted black;" class="bg-info text-center text-white p-4 mb-4"><h2><i class="fa fa-list"></i> &nbsp;Conceptos</h2></div>
+        {{form_label(form.lineas)}}
+        <div class="row"><div class="col-md-12"><a href="javascript:void(0);" id="btn_nueva_linea_presupuesto" class="btn btn-info btn-icon-split"><span class="icon text-white-50"><i class="fas fa-plus"></i></span><span class="text">Nueva Linea</span></a><hr></div></div>
+        <div class="row font-weight-bold text-gray-800">
+          <div class="col-md-5">Concepto</div>
+          <div class="col-md-1">Cantidad</div>
+          <div class="col-md-1">Precio</div>
+          <div class="col-md-1">Descuento</div>
+          <div class="col-md-1 text-center">IVA</div>
+          <div class="col-md-2 text-right">Subtotal</div>
+          <div class="col-md-1"></div>
+        </div>
+
+        <div id="linea_collection_handler" data-prototype="{{ formMacros.printLineaPresupuestoRow(form.lineas.vars.prototype) | e('html_attr') }}">
+          {% for linea in form.lineas %}
+            {{ formMacros.printLineaPresupuestoRow(linea)}}
+          {% endfor %}
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <hr/>
+              <div class="row">
+                <div class="col-md-7"></div>
+                <div class="col-md-2 text-right"><h5>Subtotal:</h5></div>
+                <div class="col-md-2 text-right"><h4><span class="badge badge-info" id="total-subtotal"></span></h4></div>
+              </div>
+              <div class="row">
+                <div class="col-md-7"></div>
+                <div class="col-md-2 text-right"><h5>IVA:</h5></div>
+                <div class="col-md-2 text-right"><h4><span class="badge badge-secondary" id="total-impuestos"></span></h4></div>
+              </div>
+              <div class="row">
+                <div class="col-md-7"></div>
+                <div class="col-md-2 text-right"><h4 class="font-weight-bold">Total:</h5></div>
+                <div class="col-md-2 text-right"><h3><span class="badge badge-primary" id="total-presupuesto"></span></h3></div>
+              </div>
+            <hr/>
+            {{form_widget(form.guardar,{'attr':{'class':'btn-lg btn-success'}})}}
+
+          </div>
+        </div>
+
+
+        {{ form_end(form)}}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+<script>
+
+var $collectionHolder;
+
+$(document).ready(function(){
+
+    $collectionHolder = $('#linea_collection_handler');
+    $collectionHolder.data('index', $collectionHolder.find(':input').length);
+
+    //Actualizamos subtotales
+    actualizaSubtotales();
+    bindInputUpdate();
+
+    $("#btn_nueva_linea_presupuesto").click(function(){
+      addLineaForm($collectionHolder, $('<div></div>'));
+    });
+
+    function bindInputUpdate()
+    {
+      $(".make-subtotal-change").unbind( "click" );
+      $(".make-subtotal-change").change(function(){
+        actualizaSubtotales();
+      });
+
+      $(".btn-eliminar-concepto").unbind( "click" );
+      $(".btn-eliminar-concepto").click(function(){
+        $(this).parent().parent().remove();
+        actualizaSubtotales();
+      });
+    }
+
+    function addLineaForm($collectionHolder, $newLink){
+      var prototype = $collectionHolder.data('prototype');
+      var index = $collectionHolder.data('index');
+      var newForm = prototype;
+      newForm = newForm.replace(/__name__/g, index);
+      console.log(newForm);
+      console.log($(newForm));
+      $collectionHolder.data('index', index + 1);
+      $collectionHolder.append(newForm);
+      bindInputUpdate();
+      actualizaSubtotales();
+    }
+
+    function actualizaSubtotales(){
+      var total_subtotal = 0;
+      var total_impuestos = 0;
+
+      $(".subtotal-linea").each(function(){
+        var id = ($(this).data('id-linea'));
+        var cantidad = $("#" + id + "_cantidad").val();
+        var precio = $("#" + id + "_precio").val();
+        var descuento = $("#" + id + "_descuento").val();
+        var iva = $("#" + id + "_iva").val();
+        var subtotal = ((cantidad * precio)-descuento);
+        var total = subtotal + subtotal*iva;
+        total_subtotal+=subtotal;
+        total_impuestos+=subtotal*iva;
+        $(this).html(total.toFixed(2) + " €");
+      });
+
+      $("#total-subtotal").html(total_subtotal.toFixed(2) + " €");
+      $("#total-impuestos").html(total_impuestos.toFixed(2) + "€");
+      $("#total-presupuesto").html((total_impuestos + total_subtotal).toFixed(2) + " €");
+
+    }
+
+
+});
+</script>
+{% endblock %}

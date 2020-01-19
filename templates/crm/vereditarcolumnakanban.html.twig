@@ -1,0 +1,14 @@
+{% extends 'admin.html.twig' %}
+{% block content %}
+<h1 class="h1 mb-2 font-weight-bold text-gray-800"><i class="fas fa-fw fa-columns"></i> &nbsp;{% trans %}Ver / Editar Columna Kanban{% endtrans %}</h1>
+<div class="row">
+  <div class="col-md-12">
+    {% if smessage %}
+    <div class="alert alert-success text-success"><b>{{smessage}}</b></div>
+    {% endif %}
+    <div class="mt-2 card p-4">
+      {{form(form)}}
+    </div>
+  </div>
+</div>
+{% endblock %}

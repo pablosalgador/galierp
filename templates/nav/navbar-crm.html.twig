@@ -5,7 +5,37 @@
 </div>
 
 <li class="nav-item">
-    <a class="nav-link" href="{{path('kanban')}}">
-      <i class="fas fa-fw fa-columns"></i>
-      <span>Oportunidades de ventas</span></a>
-  </li>
+  <a class="nav-link" href="{{path('kanban')}}">
+    <i class="fas fa-fw fa-columns"></i>
+    <span>Panel de Ventas</span>
+  </a>
+</li>
+
+<li class="nav-item">
+  <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#navoportunidades" aria-expanded="true" aria-controls="navoportunidades">
+    <i class="fas fa-fw fa-bell"></i>
+    <span>{% trans %}Oportunidades{% endtrans %}</span>
+  </a>
+  <div id="navoportunidades" class="collapse" aria-labelledby="navoportunidades" data-parent="#accordionSidebar">
+    <div class="bg-white py-2 collapse-inner rounded">
+      <h6 class="collapse-header">{% trans %}Oportunidades{% endtrans %}</h6>
+      <a class="collapse-item" href="{{path('ver_oportunidades')}}"><i class="fas fa-bell fa-fw"></i> &nbsp;{% trans %}Todas{% endtrans %}</a>
+      <a class="collapse-item" href="{{path('ver_oportunidades_ganadas')}}"><i class="fas fa-thumbs-up fa-fw"></i> &nbsp;{% trans %}Ganadas{% endtrans %}</a>
+      <a class="collapse-item" href="{{path('ver_oportunidades_perdidas')}}"><i class="fas fa-thumbs-down fa-fw"></i> &nbsp;{% trans %}Perdidas{% endtrans %}</a>
+    </div>
+  </div>
+</li>
+
+<li class="nav-item">
+  <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#navpresupuestos" aria-expanded="true" aria-controls="navpresupuestos">
+    <i class="fas fa-fw fa-file-invoice"></i>
+    <span>{% trans %}Presupuestos{% endtrans %}</span>
+  </a>
+  <div id="navpresupuestos" class="collapse" aria-labelledby="navpresupuestos" data-parent="#accordionSidebar">
+    <div class="bg-white py-2 collapse-inner rounded">
+      <h6 class="collapse-header">{% trans %}Presupuestos{% endtrans %}</h6>
+      <a class="collapse-item" href="{{path('lista_presupuestos')}}"><i class="fas fa-bell fa-file-invoice"></i> &nbsp;{% trans %}Ver Lista{% endtrans %}</a>
+      <a class="collapse-item" href="{{path('nuevo_presupuesto')}}"><i class="fas fa-bell fa-file-medical"></i> &nbsp;{% trans %}Nuevo{% endtrans %}</a>
+    </div>
+  </div>
+</li>
