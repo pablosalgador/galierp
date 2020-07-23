@@ -26,6 +26,8 @@ Web: Web
 Comentarios: Comentarios
 Guardar: Guardar
 Cancelar: Cancelar
+Lista de usuarios: Lista de usuarios
+Nombre completo: Nombre completo
 Lista de clientes: Lista de clientes
 Clientes registrados: Clientes registrados
 NIF: NIF
@@ -64,3 +66,32 @@ Porcentaje exito estimado: Porcentaje exito estimado
 Ingreso estimado: Ingreso estimado
 Crear oportunidad de venta: Crear oportunidad de venta
 Crear nueva columna: Crear nueva columna
+Lista de presupuestos: Lista de presupuestos
+Fecha Emisión: Fecha Emisión
+Número: Número
+Dias validez: Días validez
+Oportunidad Venta: Oportunidad Venta
+Total: Total
+PDF: PDF
+Numero presupuesto: Número presupuesto
+Fecha emision: Fecha emisión
+Oportunidad venta: Oportunidad venta
+Nuevo Presupuesto: Nuevo Presupuesto
+Editando Presupuesto: Editando Presupuesto
+Este presupuesto tiene una validez de: Este presupuesto tiene una validez de
+desde la fecha de emision: desde la fecha de emisión
+Información del presupuesto: Información del presupuesto
+Nueva Linea: Nueva Linea
+Concepto: Concepto
+Cantidad: Cantidad
+Precio: Precio
+Descuento: Descuento
+IVA: IVA
+Subtotal: Subtotal
+Empresa: Empresa
+Empresas: Empresas
+Gestión de empresas: Gestión de empresas
+Añadir Nueva: Añadir Nueva
+Lista de empresas: Lista de empresas
+Empresas registradas: Empresas registradas
+Gestor CRM: Gestor CRM

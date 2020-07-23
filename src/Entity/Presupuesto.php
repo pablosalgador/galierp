@@ -49,6 +49,12 @@ class Presupuesto
      */
     private $cliente;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Empresa", inversedBy="presupuestos")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $empresa;
+
     public function __construct()
     {
         $this->lineas = new ArrayCollection();
@@ -157,7 +163,29 @@ class Presupuesto
         return $this;
     }
 
+    public function getEmpresa(): ?Empresa
+    {
+        return $this->empresa;
+    }
 
+    public function setEmpresa(?Empresa $empresa): self
+    {
+        $this->empresa = $empresa;
+
+        return $this;
+    }
+
+
+
+    public function getSubtotal(): ?float
+    {
+      $subtotal = 0;
+      foreach($this->getLineas() as $linea)
+      {
+        $subtotal+=($linea->getPrecio() * $linea->getCantidad());
+      }
+      return $subtotal;
+    }
     public function getTotal(): ?float
     {
       $total = 0;
@@ -167,5 +195,16 @@ class Presupuesto
       }
       return $total;
     }
+
+    public function getIVA(): ?float
+    {
+        $iva = 0;
+        foreach($this->getLineas() as $linea)
+        {
+          $iva+=($linea->getIVA() * $linea->getPrecio());
+        }
+        return $iva;
+    }
+
 
 }

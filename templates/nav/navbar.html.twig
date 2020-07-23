@@ -37,8 +37,14 @@
   <!-- Fin Sidebar: Administrador -->
 
   <!-- Sidebar: CRM -->
-  {% include 'nav/navbar-crm.html.twig' %}
+  {% if is_granted('ROLE_CRM') %}
+    {% include 'nav/navbar-crm.html.twig' %}
+  {% endif %}
   <!-- End Sidebar -->
+
+  <!-- Sidebar: Fiscal -->
+  {% include 'nav/navbar-fiscal.html.twig' %}
+  <!-- Fin sidebar: Fiscal -->
 
   <!-- Sidebar Toggler (Sidebar) -->
   <div class="text-center d-none d-md-inline">

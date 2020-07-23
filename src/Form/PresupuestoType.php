@@ -17,7 +17,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use App\Entity\Cliente;
 use App\Entity\LineaPresupuesto;
 use App\Entity\OportunidadVenta;
-
+use App\Entity\Empresa;
 
 class PresupuestoType extends AbstractType
 {
@@ -37,6 +37,10 @@ class PresupuestoType extends AbstractType
             'placeholder' => '-',
             'required' => false,
             'choices' => $options['oportunidades']
+          ])
+          ->add('empresa', EntityType::class, [
+            'class' => Empresa::class,
+            'choice_label' => 'nombrecomercial'
           ])
           ->add('lineas', CollectionType::class, [
             'entry_type' => LineaPresupuestoType::class,

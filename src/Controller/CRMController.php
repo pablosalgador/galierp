@@ -26,18 +26,27 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+
+//Entidades
 use App\Entity\ColumnaKanban;
 use App\Entity\OportunidadVenta;
 use App\Entity\Usuario;
 use App\Entity\Cliente;
 use App\Entity\Presupuesto;
 
+//Formularios
 use App\Form\OportunidadVentaType;
 use App\Form\ColumnaKanbanType;
 use App\Form\PresupuestoType;
 use App\Form\LineaPresupuestoType;
 
+//Servicios
+use App\Service\PDFGenerator;
 
+/**
+ * @IsGranted("ROLE_CRM")
+ */
 class CRMController extends AbstractController
 {
 
@@ -392,6 +401,23 @@ class CRMController extends AbstractController
 
   }
 
+  /**
+  * @route("/{_locale}/presupuesto/{id}/pdf", name="ver_presupuesto_pdf")
+  */
+  public function verPresupuestoPDF($id, PDFGenerator $pdfGenerator)
+  {
+    $presupuestoRepository = $this->getDoctrine()->getRepository(Presupuesto::class);
+    $presupuesto = $presupuestoRepository->findOneById($id);
+    if($presupuesto==null){
+      //TODO: Return error
+      die("Error");
+    }
+    // Retrieve the HTML generated in our twig file
+    $html = $this->renderView('pdf/presupuesto.html.twig', [
+        'presupuesto'=>$presupuesto
+    ]);
+    $pdfGenerator->presupuestoAPDF($html);
+  }
 
   /**
   * @Route("/ajax/kanban_columns", name="ajax_kanban_columns")

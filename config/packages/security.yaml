@@ -35,7 +35,10 @@ security:
 
     role_hierarchy:
         ROLE_SUPER_ADMIN: [ROLE_ADMIN]
-        ROLE_ADMIN: [ROLE_USER]
+        ROLE_ADMIN: [ROLE_CRM, ROLE_CRM, ROLE_FISCAL, ROLE_MARKETING, ROLE_USER]
+        ROLE_CRM: ROLE_USER
+        ROLE_FISCAL: ROLE_USER
+        ROLE_MARKETING: ROLE_USER
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used

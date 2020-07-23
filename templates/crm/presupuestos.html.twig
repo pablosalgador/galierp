@@ -50,6 +50,7 @@ $("#tablaPresupuestos").dataTable({"order":[[ 0, "desc"]],"language":{"url":"{{a
               <td>{{presupuesto.total | number_format(2)}} €</td>
               <td class="text-center">
                 <a href="{{path("ver_editar_presupuesto",{"id":presupuesto.id})}}" class="btn btn-primary btn-icon-split btn-sm"><span class="icon text-white"><i class="fas fa-fw fa-eye"></i></span><span class="text">{% trans %}Ver{% endtrans %}</span></a>
+                <a target="_blank" href="{{path("ver_presupuesto_pdf",{"id":presupuesto.id})}}" class="btn btn-success btn-icon-split btn-sm"><span class="icon text-white"><i class="fas fa-fw fa-file-pdf"></i></span><span class="text">{% trans %}PDF{% endtrans %}</span></a>
               </td>
             </tr>
             {% endfor %}

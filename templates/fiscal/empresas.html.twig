@@ -1,0 +1,62 @@
+{% extends 'admin.html.twig' %}
+{% block stylesheets %}
+{{parent()}}
+  <link href="{{asset('vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
+{% endblock %}
+{% block javascripts %}
+{{parent()}}
+<script src="{{asset('vendor/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('vendor/datatables/dataTables.bootstrap4.min.js')}}"></script>
+<script>
+$("#tablaEmpresas").dataTable({"order":[[ 0, "desc"]],"language":{"url":"{{asset('vendor/datatables/')}}{{ app.request.locale }}.json"}})
+</script>
+{% endblock %}
+{% block content %}
+  <h1 class="h1 mb-2 font-weight-bold text-gray-800"><i class="fas fa-fw fa-building"></i> &nbsp;{% trans %}Lista de empresas{% endtrans %}</h1>
+<hr/>
+  <a href="{{path('nuevaempresa')}}" class="btn btn-primary btn-icon-split mb-3">
+    <span class="icon text-white-50">
+      <i class="fas fa-plus"></i>
+    </span>
+    <span class="text">{% trans %}Añadir Nueva{% endtrans %}</span>
+  </a>
+
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">{% trans %}Empresas registradas{% endtrans %}</h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="tablaEmpresas" width="100%" cellspacing="0">
+          <thead>
+            <tr>
+              <th class="d-none">ID</th>
+              <th>{% trans %}NIF{% endtrans %}</th>
+              <th>{% trans %}Nombre Comercial{% endtrans %}</th>
+              <th>{% trans %}Razón Social{% endtrans %}</th>
+              <th>{% trans %}País{% endtrans %}</th>
+              <th>{% trans %}Email{% endtrans %}</th>
+              <th class="text-center">{% trans %}Opciones{% endtrans %}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for empresa in empresas %}
+            <tr>
+              <td class="d-none">{{empresa.id}}</td>
+              <td>{{empresa.nif}}</td>
+              <td>{{empresa.nombrecomercial}}</td>
+              <td>{{empresa.razonsocial}}</td>
+              <td>{{empresa.pais}}</td>
+              <td>{{empresa.email}}</td>
+              <td class="text-center">
+                  <a href="{{path('vereditarempresa',{"id":empresa.id})}}" class="btn btn-primary btn-icon-split btn-sm"><span class="icon text-white"><i class="fas fa-fw fa-eye"></i></span><span class="text">Ver</span></a>
+
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+{% endblock %}

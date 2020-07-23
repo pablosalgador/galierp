@@ -9,11 +9,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 
+
+
 use App\Entity\Cliente;
 use App\Entity\Usuario;
 use App\Form\ClienteFormType;
 use App\Form\UsuarioFormType;
 use App\Form\UsuarioFormEditType;
+
 
 class CoreController extends AbstractController
 {
@@ -168,6 +171,9 @@ class CoreController extends AbstractController
               $roles[]="ROLE_ADMIN";
             }
           }
+          if($request->get('rol_crm') != null){
+            $roles[]="ROLE_CRM";
+          }
           $usuario->setRoles($roles);
           //End Roles
          $entityManager = $this->getDoctrine()->getManager();
@@ -203,6 +209,9 @@ class CoreController extends AbstractController
            }else if($request->get('rol_admin') == null && in_array('ROLE_ADMIN',$roles)){
               $roles = array_diff($roles,array("ROLE_ADMIN"));
            }
+         }
+         if($request->get('rol_crm') != null){
+           $roles[]="ROLE_CRM";
          }
          $usuario->setRoles($roles);
          //END: Roles

@@ -1,0 +1,18 @@
+<!-- Heading -->
+<div class="sidebar-heading">
+  Fiscal
+</div>
+
+<li class="nav-item">
+  <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#navempresas" aria-expanded="true" aria-controls="navempresas">
+    <i class="fas fa-fw fa-building"></i>
+    <span>{% trans %}Empresas{% endtrans %}</span>
+  </a>
+  <div id="navempresas" class="collapse" aria-labelledby="navempresas" data-parent="#accordionSidebar">
+    <div class="bg-white py-2 collapse-inner rounded">
+      <h6 class="collapse-header">{% trans %}Gestión de empresas{% endtrans %}</h6>
+      <a class="collapse-item" href="{{path("listaempresas")}}"><i class="fas fa-fw fa-building"></i> &nbsp;{% trans %}Ver Lista{% endtrans %}</a>
+      <a class="collapse-item" href="{{path("nuevaempresa")}}"><i class="fas fa-fw fa-plus"></i> &nbsp;{% trans %}Añadir Nueva{% endtrans %}</a>
+    </div>
+  </div>
+</li>

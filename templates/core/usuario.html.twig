@@ -72,6 +72,12 @@
           <label class="custom-control-label" for="rol_admin">Administrador</label>
         </div>
       </div>
+      <div class="col-md-4">
+        <div class="custom-control custom-switch custom-switch-inline">
+          <input type="checkbox" class="custom-control-input" name="rol_crm" id="rol_crm" {{ ('ROLE_CRM' in roles ? 'checked' : '')}}>
+          <label class="custom-control-label" for="rol_crm">{% trans %}Gestor CRM{% endtrans %}</label>
+        </div>
+      </div>
     </div>
 
     <div class="row mt-4">

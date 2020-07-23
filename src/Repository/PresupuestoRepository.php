@@ -24,7 +24,7 @@ class PresupuestoRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('p');
         $qb->select('p.numero_presupuesto as numero')
         ->orderBy('p.id','DESC')->setMaxResults(1);
-        return $qb->getQuery()->getSingleResult();
+        return $qb->getQuery()->getOneOrNullResult();
     }
 
     // /**

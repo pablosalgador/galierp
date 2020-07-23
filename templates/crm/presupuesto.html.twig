@@ -12,13 +12,19 @@
 {% endmacro %}
 {% extends 'admin.html.twig' %}
 {% block content %}
-<h1 class="h3 mb-2 font-weight-bold text-gray-800"><i class="fas fa-fw fa-columns"></i> &nbsp;Presupuesto</h1>
+<h1 class="h3 mb-2 font-weight-bold text-gray-800"><i class="fas fa-fw fa-columns"></i>
+  {% if form.vars["value"].id is null %}
+    {% trans %}Nuevo Presupuesto{% endtrans %}
+  {% else %}
+    {% trans %}Editando Presupuesto{% endtrans %} {{form.vars["value"].numeropresupuesto}}
+  {% endif %}
+</h1>
 <hr/>
 <div class="container">
   <div class="row">
     <div class="col-md-12">
       <div class="bg-white p-4" style="border:2px solid #36b9cc">
-        <div style="border: 2px dotted black;" class="bg-info text-center text-white p-4 mb-4"><h2><i class="fa fa-info-circle"></i> &nbsp;Información del presupuesto</h2></div>
+        <div style="border: 2px dotted black;" class="bg-info text-center text-white p-4 mb-4"><h2><i class="fa fa-info-circle"></i> &nbsp;{% trans %}Información del presupuesto{% endtrans %}</h2></div>
         {% form_theme form 'bootstrap_4_layout.html.twig' %}
         {{ form_start(form) }}
         <div class="row">
@@ -27,18 +33,19 @@
           <div class="col-md-4">{{ form_row(form.dias_validez)}}</div>
           <div class="col-md-6">{{ form_row(form.cliente)}}</div>
           <div class="col-md-6">{{ form_row(form.oportunidadVenta)}}</div>
+          <div class="col-md-12">{{ form_row(form.empresa)}}</div>
         </div>
 
         <div style="border: 2px dotted black;" class="bg-info text-center text-white p-4 mb-4"><h2><i class="fa fa-list"></i> &nbsp;Conceptos</h2></div>
         {{form_label(form.lineas)}}
-        <div class="row"><div class="col-md-12"><a href="javascript:void(0);" id="btn_nueva_linea_presupuesto" class="btn btn-info btn-icon-split"><span class="icon text-white-50"><i class="fas fa-plus"></i></span><span class="text">Nueva Linea</span></a><hr></div></div>
+        <div class="row"><div class="col-md-12"><a href="javascript:void(0);" id="btn_nueva_linea_presupuesto" class="btn btn-info btn-icon-split"><span class="icon text-white-50"><i class="fas fa-plus"></i></span><span class="text">{% trans %}Nueva Linea{% endtrans %}</span></a><hr></div></div>
         <div class="row font-weight-bold text-gray-800">
-          <div class="col-md-5">Concepto</div>
-          <div class="col-md-1">Cantidad</div>
-          <div class="col-md-1">Precio</div>
-          <div class="col-md-1">Descuento</div>
-          <div class="col-md-1 text-center">IVA</div>
-          <div class="col-md-2 text-right">Subtotal</div>
+          <div class="col-md-5">{% trans %}Concepto{% endtrans %}</div>
+          <div class="col-md-1">{% trans %}Cantidad{% endtrans %}</div>
+          <div class="col-md-1">{% trans %}Precio{% endtrans %}</div>
+          <div class="col-md-1">{% trans %}Descuento{% endtrans %}</div>
+          <div class="col-md-1 text-center">{% trans %}IVA{% endtrans %}</div>
+          <div class="col-md-2 text-right">{% trans %}Subtotal{% endtrans %}</div>
           <div class="col-md-1"></div>
         </div>
 
@@ -53,12 +60,12 @@
             <hr/>
               <div class="row">
                 <div class="col-md-7"></div>
-                <div class="col-md-2 text-right"><h5>Subtotal:</h5></div>
+                <div class="col-md-2 text-right"><h5>{% trans %}Subtotal{% endtrans %}:</h5></div>
                 <div class="col-md-2 text-right"><h4><span class="badge badge-info" id="total-subtotal"></span></h4></div>
               </div>
               <div class="row">
                 <div class="col-md-7"></div>
-                <div class="col-md-2 text-right"><h5>IVA:</h5></div>
+                <div class="col-md-2 text-right"><h5>{% trans %}IVA{% endtrans %}:</h5></div>
                 <div class="col-md-2 text-right"><h4><span class="badge badge-secondary" id="total-impuestos"></span></h4></div>
               </div>
               <div class="row">

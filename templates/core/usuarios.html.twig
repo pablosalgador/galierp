@@ -35,6 +35,7 @@ $("#tablaUsuarios").dataTable({"order":[[ 0, "desc"]],"language":{"url":"{{asset
               <th>{% trans %}Email{% endtrans %}</th>
               <th class="text-center">S. Admin.</th>
               <th class="text-center">Admin.</th>
+              <th class="text-center">{% trans %}Gestor CRM{% endtrans %}</th>
               <th class="text-center">{% trans %}Opciones{% endtrans %}</th>
             </tr>
           </thead>
@@ -46,6 +47,7 @@ $("#tablaUsuarios").dataTable({"order":[[ 0, "desc"]],"language":{"url":"{{asset
               <td>{{usuario.email}}</td>
               <td class="text-center">{% if 'ROLE_SUPER_ADMIN' in usuario.roles %}<i class="fa fa-check text-success"></i>{% endif %}</td>
               <td class="text-center">{% if 'ROLE_ADMIN' in usuario.roles %}<i class="fa fa-check text-success"></i>{% endif %}</td>
+              <td class="text-center">{% if 'ROLE_CRM' in usuario.roles %}<i class="fa fa-check text-success"></i>{% endif %}</td>
               <td class="text-center">
                   <a href="{{path("vereditarusuario",{"id":usuario.id})}}" class="btn btn-primary btn-icon-split btn-sm"><span class="icon text-white"><i class="fas fa-fw fa-eye"></i></span><span class="text">{% trans %}Ver{% endtrans %}</span></a>
 
