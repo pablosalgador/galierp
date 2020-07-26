@@ -25,20 +25,3 @@
     </div>
   </div>
 </li>
-
-<li class="nav-item">
-  <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#navpresupuestos" aria-expanded="true" aria-controls="navpresupuestos">
-    <i class="fas fa-fw fa-file-invoice"></i>
-    <span>{% trans %}Presupuestos{% endtrans %}</span>
-  </a>
-  <div id="navpresupuestos" class="collapse" aria-labelledby="navpresupuestos" data-parent="#accordionSidebar">
-    <div class="bg-white py-2 collapse-inner rounded">
-      <h6 class="collapse-header">{% trans %}Presupuestos{% endtrans %}</h6>
-      <a class="collapse-item" href="{{path('lista_presupuestos')}}"><i class="fas fa-bell fa-file-invoice"></i> &nbsp;{% trans %}Ver Lista{% endtrans %}</a>
-      <a class="collapse-item" href="{{path('nuevo_presupuesto')}}"><i class="fas fa-bell fa-file-medical"></i> &nbsp;{% trans %}Nuevo{% endtrans %}</a>
-    </div>
-  </div>
-</li>
-
-<!-- Divider -->
-<hr class="sidebar-divider d-none d-md-block">

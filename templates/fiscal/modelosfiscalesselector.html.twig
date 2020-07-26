@@ -1,0 +1,51 @@
+{% extends 'admin.html.twig' %}
+{% block content %}
+  <h1 class="h1 mb-2 font-weight-bold text-gray-800"><i class="fas fa-fw fa-money-check"></i> &nbsp;{% trans %}Resumen Fiscal{% endtrans %}</h1>
+  <hr>
+
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">{% trans %}Selecciona la empresa y el periodo{% endtrans %}</h6>
+    </div>
+    <div class="card-body">
+      <form method="get" action="{{path('resumen_fiscal')}}">
+        <div class="row">
+          <div class="col-md-4">
+            <label for="id_empresa">Empresa</label>
+            <select id="id_empresa" class="form-control" name="id_empresa">
+              {% for empresa in empresas %}
+                  <option value="{{empresa.id}}">{{empresa.nombrecomercial}}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="col-md-4">
+            <label for="ano">Año</label>
+            <select id="ano" name="ano" class="form-control">
+              {% for i in (current_year - 5)..(current_year + 5) %}
+                <option value="{{i}}" {{(i==current_year?'selected':'')}}>{{i}}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="col-md-4">
+            <label for="trimestre">Trimestre</label>
+            <select id="trimestre" name="trimestre" class="form-control">
+              <option value="1">1 Trimestre</option>
+              <option value="2">2 Trimestre</option>
+              <option value="3">3 Trimestre</option>
+              <option value="4">4 Trimestre</option>
+              <option value="5">Resumen Anual</option>
+            </select>
+          </div>
+
+        </div>
+        <div class="row mt-4">
+          <div class="col-md-12">
+            <input type="submit" class="btn btn-primary" value="{% trans %}Ver Resumen Fiscal{% endtrans %}"/>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

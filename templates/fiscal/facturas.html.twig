@@ -1,0 +1,112 @@
+{% extends 'admin.html.twig' %}
+{% block stylesheets %}
+{{parent()}}
+  <link href="{{asset('vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
+{% endblock %}
+{% block javascripts %}
+{{parent()}}
+<script src="{{asset('vendor/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('vendor/datatables/dataTables.bootstrap4.min.js')}}"></script>
+<script>
+$("#tablaFacturas").dataTable({"order":[[ 0, "desc"]],"language":{"url":"{{asset('vendor/datatables/')}}{{ app.request.locale }}.json"}})
+</script>
+{% endblock %}
+{% block content %}
+  <h1 class="h1 mb-2 font-weight-bold text-gray-800"><i class="fas fa-fw fa-file-invoice"></i> &nbsp;{{title_h1}}</h1>
+<hr/>
+  <a href="{{nueva_url}}" class="btn btn-primary btn-icon-split mb-3">
+    <span class="icon text-white-50">
+      <i class="fas fa-plus"></i>
+    </span>
+    <span class="text">{% trans %}Añadir Nueva{% endtrans %}</span>
+  </a>
+
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">{% trans %}Facturas{% endtrans %}</h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="tablaFacturas" width="100%" cellspacing="0">
+          <thead>
+            <tr>
+              <th>{% trans %}Fecha Emisión{% endtrans %}</th>
+              <th>{% trans %}Empresa{% endtrans %}</th>
+              <th>{% trans %}Serie{% endtrans %}</th>
+              <th>{% trans %}Número{% endtrans %}</th>
+              <th>{% trans %}Cliente{% endtrans %}</th>
+              <th>{% trans %}Oportunidad Venta{% endtrans %}</th>
+              <th>{% trans %}Total{% endtrans %}</th>
+              <th class="text-center">{% trans %}Opciones{% endtrans %}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for factura in facturas %}
+            <tr>
+              <td>{{factura.fechaEmision | date('d/m/Y')}}</td>
+              <td>{{factura.empresa.nombrecomercial}}</td>
+              <td>{{factura.serie}}</td>
+              <td>{{factura.numeroFactura}}</td>
+              <td>{{factura.cliente.nombrecomercial}}</td>
+              <td>
+                  {% if factura.oportunidadVenta %}
+                    <a href="{{path('ver_editar_oportunidad_venta',{'id':factura.oportunidadVenta.id})}}">{{factura.oportunidadVenta.nombre}}</>
+                  {% else %}
+                    -
+                  {% endif %}
+              </td>
+              <td>{{factura.total | number_format(2)}} €</td>
+              <td class="text-center">
+                <a href="{{path("ver_factura",{"id":factura.id})}}" class="btn btn-primary btn-icon-split btn-sm"><span class="icon text-white"><i class="fas fa-fw fa-eye"></i></span><span class="text">{% trans %}Ver{% endtrans %}</span></a>
+                <a href="{{path("ver_editar_factura",{"id":factura.id})}}" class="btn btn-warning btn-icon-split btn-sm"><span class="icon text-white"><i class="fas fa-fw fa-exclamation-triangle"></i></span><span class="text">{% trans %}Editar Factura{% endtrans %}</span></a>
+                <a target="_blank" href="{{path("ver_factura_pdf",{"id":factura.id})}}" class="btn btn-success btn-icon-split btn-sm"><span class="icon text-white"><i class="fas fa-fw fa-file-pdf"></i></span><span class="text">{% trans %}PDF{% endtrans %}</span></a>
+
+                <button data-toggle="modal" data-target="#eliminar_factura_{{factura.id}}" type="button" class="btn btn-danger btn-icon-split btn-sm"><span class="icon text-white"><i class="fas fa-fw fa-eye"></i></span><span class="text">{% trans %}Eliminar{% endtrans %}</span></button>
+                <!-- Modal -->
+                <div class="modal fade text-center" id="eliminar_factura_{{factura.id}}" tabindex="-1" role="dialog" aria-labelledby="eliminar_factura_{{factura.id}}_label" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="eliminar_factura_{{factura.id}}_label">{% trans %}Eliminar factura{% endtrans %}{{factura.serie}}/{{factura.numerofactura}}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <div class="alert alert-danger">
+                            <p class="text-danger">{% trans %}¿Estás seguro de que deseas eliminar la siguiente factura?{% endtrans %}</p>
+                            <p class="text-danger">
+                              Serie / Número: <b>{{factura.serie}}/{{factura.numeroFactura}}</b><br>
+                              Cliente: <b>{{factura.cliente.nombrecomercial}}</b>
+                              Empresa: <b>{{factura.empresa.nombrecomercial}}</b>
+                              Importe: <b>{{factura.total}}</b>
+
+                              <hr/>
+                              {% if factura.ingresos.count %}
+                              <div class="text-white p-2" style="border:2px dotted red;background:red">
+                              <i class="text-white">Atención, la factura tiene ingresos asociados<hr></i>
+                                  {% if factura.ingresos.count %}Ingresos asociados: {{factura.ingresos.count}}<br/>{% endif %}
+                                  <i>Se eliminará la asociación a dichos ingresos si continúa, pero no se borrarán los ingresos</i>
+                              </div>
+                              {% endif %}
+
+                            </p>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <a href="{{path('eliminar_factura',{'id':factura.id})}}" class="btn btn-danger"><i class="fa fa-exclamation-triangle"></i>&nbsp; {% trans %}Eliminar Factura{% endtrans %}</a>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+{% endblock %}

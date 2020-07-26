@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Factura  {{factura.serie}}/{{factura.numerofactura}}</title>
+        <style>
+
+          table{
+            border:1px solid black;
+            border-collapse: collapse;
+          }
+
+          table tr td{
+            padding:10px;
+          }
+        </style>
+
+    </head>
+    <body>
+        <table style="width:100%;border:none;font-size:.9em">
+          <tr>
+            <td style="width:50%"><img src="{{logo}}" height="75px"/></td>
+            <td style="width:50%;text-align:right;">  <b>{% trans %}Fecha de Emisión{% endtrans %}: </b>{{factura.fechaEmision | date('d/m/Y')}}<br/><b>{% trans %}Número de factura{% endtrans %}</b>: {{factura.serie}}/{{factura.numerofactura}}</td>
+          </tr>
+        </table>
+
+          <table style="width:100%;border:none;font-size:.8em;margin-top:30px;margin-bottom:75px;">
+            <tr>
+              <td style="border:1px dotted #333;width:45%;">
+                <b>{{factura.empresa.nif}}</b><br />
+                {{factura.empresa.razonsocial}}<br/>
+                {{factura.empresa.direccion}}<br />
+                {{factura.empresa.codigopostal}} - {{factura.empresa.provincia}}<br />
+                {{factura.empresa.pais}}
+              </td>
+              <td></td>
+              <td style="border:1px dotted #333;width:45%">
+                <b>{{factura.cliente.nif}}</b><br />
+                {{factura.cliente.razonsocial}}<br/>
+                {{factura.cliente.direccion}}<br />
+                {{factura.cliente.codigopostal}} - {{factura.cliente.provincia}}<br />
+                {{factura.cliente.pais}}
+              </td>
+            </tr>
+          </table>
+
+
+
+        <table style="width:100%;font-size:.75em">
+          <tr style="background:black;color:white;">
+              <th style="padding:10px; width:10%">{% trans %}Cantidad{% endtrans %}</th>
+              <th style="padding:10px; width:40%">{% trans %}Concepto{% endtrans %}</th>
+              <th style="padding:10px; width:15%">{% trans %}Precio{% endtrans %}</th>
+              <th style="padding:10px; width:10%">{% trans %}Desc.{% endtrans %}</th>
+              <th style="padding:10px; width:10%">{% trans %}IVA{% endtrans %}</th>
+              <th style="padding:10px; width:15%">{% trans %}TOTAL{% endtrans %}</th>
+          </tr>
+          {% for linea in factura.lineas %}
+          <tr>
+            <td>{{linea.cantidad}}</td>
+            <td>{{linea.concepto}}</td>
+            <td>{{linea.precio | number_format(2)}} €</td>
+            <td>{{linea.descuento| number_format(2)}} €</td>
+            <td>{{linea.iva*100}} %</td>
+            <td>{{linea.total | number_format(2)}} €</td>
+          </tr>
+
+          {% endfor %}
+          <tr><td style="background-color:black" colspan="6"></td></tr>
+          <tr>
+            <td style="border-top:1px solid black;" colspan="2"></td>
+            <td style="text-align:right;border-top:1px solid black;" colspan="2">Subtotal:</td>
+            <td style="text-align:right;border-top:1px solid black;" colspan="2">{{factura.subtotal | number_format(2)}} €</td>
+          </tr>
+          <tr  style="text-align:right">
+            <td colspan="2"></td>
+            <td colspan="2">{% trans %}IVA{% endtrans %}:</td>
+            <td colspan="2">{{factura.iva | number_format(2)}} €</td>
+          </tr>
+
+          {% if factura.irpf > 0 %}
+          <tr style="text-align:right">
+            <td colspan="2"></td>
+            <td colspan="2">{% trans %}IRPF {% endtrans %}:</td>
+            <td colspan="2">{{(factura.irpf * factura.subtotal) | number_format(2)}} €</td>
+          </tr>
+          {% endif %}
+
+          <tr style="text-align:right">
+            <td colspan="2"></td>
+            <td colspan="2">{% trans %}TOTAL{% endtrans %}:</td>
+            <td colspan="2"><b>{{factura.total | number_format(2)}} €</b></td>
+          </tr>
+        </table>
+
+
+    </body>
+</html>

@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
-
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 
 use App\Entity\Cliente;
@@ -26,15 +26,16 @@ class CoreController extends AbstractController
     public function index()
     {
       //Posible ampliación: Crear una "Landing Page"
-      return $this->redirectToRoute("dashboard");
+      return $this->redirectToRoute("listaclientes");
     }
 
     /**
      * @Route("/{_locale}/dashboard", name="dashboard")
+     * @IsGranted({"ROLE_USER"})
      */
     public function dashboard(Request $request)
     {
-      if ($this->isGranted('ROLE_ADMIN')) {
+      /*if ($this->isGranted('ROLE_ADMIN')) {
           $clirepo = $this->getDoctrine()->getRepository(Cliente::class);
           $nclientes = count($clirepo->findAllActive());
           return $this->render('core/dashboard_admin.html.twig',
@@ -42,12 +43,14 @@ class CoreController extends AbstractController
           );
       }else {
           return $this->render('admin.html.twig');
-      }
+      }*/
+      return $this->redirectToRoute('listaclientes');
     }
 
 
     /**
      * @Route("/{_locale}/clientes", name="listaclientes")
+     * @IsGranted({"ROLE_USER"})
      */
     public function listaClientes()
     {
@@ -58,6 +61,7 @@ class CoreController extends AbstractController
 
     /**
      * @Route("/{_locale}/cliente/nuevo", name="nuevocliente")
+     * @IsGranted({"ROLE_USER"})
      */
     public function nuevoCliente(Request $request)
     {
@@ -80,6 +84,7 @@ class CoreController extends AbstractController
 
     /**
      * @Route("/{_locale}/cliente/{id}", name="vereditarcliente")
+     * @IsGranted({"ROLE_USER"})
      */
     public function vereditarCliente($id, Request $request)
     {
@@ -106,6 +111,7 @@ class CoreController extends AbstractController
 
     /**
      * @Route("/{_locale}/cliente/{id}/baja", name="bajacliente")
+     * @IsGranted({"ROLE_USER"})
      */
     public function bajaCliente($id)
     {
@@ -121,6 +127,7 @@ class CoreController extends AbstractController
 
     /**
      * @Route("/{_locale}/cliente/{id}/alta", name="altacliente")
+     * @IsGranted({"ROLE_USER"})
      */
     public function altaCliente($id)
     {
@@ -136,7 +143,41 @@ class CoreController extends AbstractController
 
 
     /**
+     * @Route("/{_locale}/cliente/{id}/eliminar", name="eliminar_cliente")
+     * @IsGranted({"ROLE_USER"})
+     */
+    public function eliminarCliente($id)
+    {
+
+      $cli_repository = $this->getDoctrine()->getRepository(Cliente::class);
+      $cliente = $cli_repository->findOneById($id);
+      if($cliente==null)
+        throw $this->createNotFoundException('No existe el cliente con ese identificador');
+
+      //Oportunidades de ventas?
+      if($cliente->getOportunidadesVentas()->count()>0)
+        throw $this->createNotFoundException('El cliente que se intenta eliminar aún tiene oportunidades de venta asociadas');
+
+      //Presupuestos?
+      if($cliente->getPresupuestos()->count()>0)
+        throw $this->createNotFoundException('El cliente que se intenta eliminar aún tiene presupuestos asociados');
+
+      //Facturas?
+      if($cliente->getFacturas()->count()>0)
+        throw $this->createNotFoundException('El cliente que se intenta eliminar tiene facturas asociadas');
+
+      $entityManager = $this->getDoctrine()->getManager();
+      $entityManager->remove($cliente);
+      $entityManager->flush();
+      return $this->redirectToRoute("listaclientes");
+
+
+    }
+
+
+    /**
      * @Route("/{_locale}/usuarios", name="listausuarios")
+     * @IsGranted({"ROLE_ADMIN"})
      */
      public function listaUsuarios()
      {
@@ -147,6 +188,7 @@ class CoreController extends AbstractController
 
      /**
       * @Route("/{_locale}/usuario/nuevo", name="nuevousuario")
+      * @IsGranted({"ROLE_ADMIN"})
       */
      public function nuevoUsuario(Request $request, UserPasswordEncoderInterface $passwordEncoder)
      {
@@ -174,6 +216,10 @@ class CoreController extends AbstractController
           if($request->get('rol_crm') != null){
             $roles[]="ROLE_CRM";
           }
+          if($request->get('rol_fiscal') != null)
+          {
+            $roles[]="ROLE_FISCAL";
+          }
           $usuario->setRoles($roles);
           //End Roles
          $entityManager = $this->getDoctrine()->getManager();
@@ -188,6 +234,7 @@ class CoreController extends AbstractController
 
      /**
       * @Route("/{_locale}/usuario/{id}", name="vereditarusuario")
+      * @IsGranted({"ROLE_ADMIN"})
       */
      public function verEditarUsuario($id, Request $request)
      {
@@ -212,7 +259,16 @@ class CoreController extends AbstractController
          }
          if($request->get('rol_crm') != null){
            $roles[]="ROLE_CRM";
+         }else{
+           $roles = array_diff($roles,array("ROLE_CRM"));
          }
+
+         if($request->get('rol_fiscal') != null){
+           $roles[]="ROLE_FISCAL";
+         }else{
+           $roles = array_diff($roles,array("ROLE_FISCAL"));
+         }
+
          $usuario->setRoles($roles);
          //END: Roles
          $entityManager = $this->getDoctrine()->getManager();
@@ -231,6 +287,7 @@ class CoreController extends AbstractController
 
      /**
       * @Route("/{_locale}/usuario/{id}/cambiarpassword", name="cambiarpassword")
+      * @IsGranted({"ROLE_ADMIN"})
       */
       public function cambiarPassword($id, Request $request, UserPasswordEncoderInterface $passwordEncoder)
       {
@@ -268,20 +325,33 @@ class CoreController extends AbstractController
       }
 
       /**
-       * @Route("/{_locale}/usuario/{id}/baja", name="bajausuario")
+       * @Route("/{_locale}/usuario/{id}/eliminar", name="eliminar_usuario")
+       * @IsGranted({"ROLE_ADMIN"})
        */
-      public function bajaUsuario($id)
+      public function eliminarUsuario($id)
       {
+
+          $usuarioRepository = $this->getDoctrine()->getRepository(Usuario::class);
+          $usuario = $usuarioRepository->findOneById($id);
+
+          if($usuario==null)
+            throw $this->createNotFoundException('No existe el usuario con el id especificado');
+
+          if(in_array("ROLE_SUPER_ADMIN",$usuario->getRoles())){
+            throw $this->createNotFoundException('No se puede eliminar el usuario superadministrador');
+          }
+
+          if($usuario->getOportunidadesVentas()->count()>0)
+            throw $this->createNotFoundException('El usuario tiene oportunidades de venta asociadas, no se puede eliminar');
+
+          $em = $this->getDoctrine()->getManager();
+          $em->remove($usuario);
+          $em->flush();
+
+          return $this->redirectToRoute("listausuarios");
 
       }
 
-      /**
-       * @Route("/{_locale}/usuario/{id}/alta", name="altausuario")
-       */
-      public function altaUsuario($id)
-      {
-
-      }
 
 
 }

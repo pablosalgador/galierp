@@ -1,0 +1,70 @@
+{% extends 'admin.html.twig' %}
+{% block content %}
+  <h1 class="h1 mb-2 font-weight-bold text-gray-800"><i class="fas fa-fw fa-money-check"></i> &nbsp;{% trans %}Resumen Fiscal{% endtrans %}</h1>
+
+  <div class="card">
+    <div class="card-header">
+      <h3><span class="badge badge-primary p-3">{{nombre_empresa}}</span> <span class="badge badge-info p-3">{{ano}}</span>
+      <span class="badge badge-info p-3">
+      {% if trimestre == 1 %}1er Trimestre
+      {% elseif trimestre == 2 %}2º Trimestre
+      {% elseif trimestre == 3 %}3er Trimestre
+      {% elseif trimestre == 4 %}4º Trimestre
+      {% elseif trimestre == 5 %}Resumen Anual
+      {% endif %}
+      </span>
+      </h3>
+
+    </div>
+    <div class="card-body">
+      {% if trimestre != 5 %}
+      <h4>Resumen Trimestral</h4>
+      <table class="table table-dark">
+        <thead>
+          <tr>
+            <th>Base Facturas</th>
+            <th>IVA Facturas</th>
+            <th>IRPF Facturas</th>
+            <th>Base Gastos</th>
+            <th>IVA Gastos</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{datosfiscales.subtotal_trimestre | number_format(2)}} €</td>
+            <td>{{datosfiscales.iva_trimestre | number_format(2)}} €</td>
+            <td>{{datosfiscales.irpf_trimestre | number_format(2)}} €</td>
+            <td>{{datosfiscales.gastos_trimestre | number_format(2)}} €</td>
+            <td>{{datosfiscales.iva_gastos_trimestre | number_format(2)}} €</td>
+
+          </tr>
+        </tbody>
+      </table>
+      <br>
+      {% endif %}
+      <h4 class="pt-4">Acumulado en el año {{ano}}</h4>
+      <table class="table table-dark">
+        <thead>
+          <tr>
+            <th>Base Facturas</th>
+            <th>IVA Facturas</th>
+            <th>IRPF Facturas</th>
+            <th>Base Gastos</th>
+            <th>IVA Gastos</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{datosfiscales.subtotal_acumulado | number_format(2)}} €</td>
+            <td>{{datosfiscales.iva_acumulado | number_format(2)}} €</td>
+            <td>{{datosfiscales.irpf_acumulado | number_format(2)}} €</td>
+            <td>{{datosfiscales.gastos_acumulado | number_format(2)}} €</td>
+            <td>{{datosfiscales.iva_gastos_acumulado | number_format(2)}} €</td>
+
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+{% endblock %}

@@ -11,25 +11,24 @@ class PDFGenerator{
   {
 
     $pdfOptions = new Options();
-        $pdfOptions->set('defaultFont', 'Helvetica');
+    $pdfOptions->set('defaultFont', 'Helvetica');
 
-        // Instantiate Dompdf with our options
-        $dompdf = new Dompdf($pdfOptions);
+    // Instantiate Dompdf with our options
+    $dompdf = new Dompdf($pdfOptions);
 
+    // Load HTML to Dompdf
+    $dompdf->loadHtml($html);
 
-        // Load HTML to Dompdf
-        $dompdf->loadHtml($html);
+    // (Optional) Setup the paper size and orientation 'portrait' or 'portrait'
+    $dompdf->setPaper('A4', 'portrait');
 
-        // (Optional) Setup the paper size and orientation 'portrait' or 'portrait'
-        $dompdf->setPaper('A4', 'portrait');
+    // Render the HTML as PDF
+    $dompdf->render();
 
-        // Render the HTML as PDF
-        $dompdf->render();
-
-        // Output the generated PDF to Browser (force download)
-        $dompdf->stream("mypdf.pdf", [
-            "Attachment" => false
-        ]);
+    // Output the generated PDF to Browser (force download)
+    $dompdf->stream("mypdf.pdf", [
+        "Attachment" => false
+    ]);
 
   }
 

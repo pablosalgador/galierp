@@ -1,4 +1,27 @@
 {% extends 'admin.html.twig' %}
+{% block stylesheets %}
+{{parent()}}
+<link href="{{asset('vendor/chartjs/Chart.min.css')}}" rel="stylesheet">
+{% endblock %}
+{% block javascripts %}
+{{parent()}}
+<script src="{{asset('vendor/chartjs/Chart.bundle.min.js')}}"></script>
+<script>
+var ctx = document.getElementById('myChart').getContext('2d');
+var chart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+    datasets: [{
+      label: 'My First dataset',
+      backgroundColor: 'rgb(255, 99, 132)',
+      borderColor: 'rgb(255, 99, 132)',
+      data: [0, 10, 5, 2, 20, 30, 45]
+    }]
+  },
+});
+</script>
+{% endblock %}
 {% block content %}
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
   <h1 class="h3 mb-0 text-gray-800"><i class="fas fa-tachometer-alt"></i> &nbsp;{% trans %}Escritorio {% endtrans %}</h1>
@@ -6,44 +29,63 @@
 </div>
 
 <div class="row">
+  <div class="col-lg-6 mb-4">
 
-            <!-- Earnings (Monthly) Card Example -->
-            <div class="col-xl-3 col-md-6 mb-4">
-              <div class="card border-left-primary shadow h-100 py-2">
-                <div class="card-body">
-                  <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Clientes Activos</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800">{{nclientes}}</div>
-                    </div>
-                    <div class="col-auto">
-                      <i class="fas fa-user-tie fa-2x text-gray-300"></i>
-                    </div>
-                  </div>
-                </div>
-                <div class="card-footer">
-                  <a href="{{path('listaclientes')}}" class="btn btn-primary btn-block">{% trans %}Ver Lista{% endtrans %} &nbsp;<i class="fas fa-arrow-circle-right"></i> </a>
-                </div>
-              </div>
-            </div>
+    <!-- Ingresos -->
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Ingresos</h6>
+      </div>
+      <div class="card-body">
+        <canvas id="myChart"></canvas>
+      </div>
+    </div>
 
 
-            <!-- Earnings (Monthly) Card Example -->
-            <div class="col-xl-3 col-md-6 mb-4">
-              <div class="card border-left-success shadow h-100 py-2">
-                <div class="card-body">
-                  <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Usuarios Activos</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800">XX</div>
-                    </div>
-                    <div class="col-auto">
-                      <i class="fas fa-user fa-2x text-gray-300"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+  </div>
+
+
+</div>
+
+<div class="row">
+
+  <!-- Earnings (Monthly) Card Example -->
+  <div class="col-xl-3 col-md-6 mb-4">
+    <div class="card border-left-primary shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Clientes Activos</div>
+            <div class="h5 mb-0 font-weight-bold text-gray-800">{{nclientes}}</div>
+          </div>
+          <div class="col-auto">
+            <i class="fas fa-user-tie fa-2x text-gray-300"></i>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <a href="{{path('listaclientes')}}" class="btn btn-primary btn-block">{% trans %}Ver Lista{% endtrans %} &nbsp;<i class="fas fa-arrow-circle-right"></i> </a>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Earnings (Monthly) Card Example -->
+  <div class="col-xl-3 col-md-6 mb-4">
+    <div class="card border-left-success shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Usuarios Activos</div>
+            <div class="h5 mb-0 font-weight-bold text-gray-800">XX</div>
+          </div>
+          <div class="col-auto">
+            <i class="fas fa-user fa-2x text-gray-300"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </div>
 

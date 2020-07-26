@@ -68,9 +68,27 @@ class Empresa
      */
     private $provincia;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Gasto", mappedBy="empresa")
+     */
+    private $gastos;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Factura", mappedBy="empresa")
+     */
+    private $facturas;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Ingreso", mappedBy="empresa")
+     */
+    private $ingresos;
+
     public function __construct()
     {
         $this->presupuestos = new ArrayCollection();
+        $this->gastos = new ArrayCollection();
+        $this->facturas = new ArrayCollection();
+        $this->ingresos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -213,6 +231,99 @@ class Empresa
     public function setProvincia(string $provincia): self
     {
         $this->provincia = $provincia;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Gasto[]
+     */
+    public function getGastos(): Collection
+    {
+        return $this->gastos;
+    }
+
+    public function addGasto(Gasto $gasto): self
+    {
+        if (!$this->gastos->contains($gasto)) {
+            $this->gastos[] = $gasto;
+            $gasto->setEmpresa($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGasto(Gasto $gasto): self
+    {
+        if ($this->gastos->contains($gasto)) {
+            $this->gastos->removeElement($gasto);
+            // set the owning side to null (unless already changed)
+            if ($gasto->getEmpresa() === $this) {
+                $gasto->setEmpresa(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Factura[]
+     */
+    public function getFacturas(): Collection
+    {
+        return $this->facturas;
+    }
+
+    public function addFactura(Factura $factura): self
+    {
+        if (!$this->facturas->contains($factura)) {
+            $this->facturas[] = $factura;
+            $factura->setEmpresa($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFactura(Factura $factura): self
+    {
+        if ($this->facturas->contains($factura)) {
+            $this->facturas->removeElement($factura);
+            // set the owning side to null (unless already changed)
+            if ($factura->getEmpresa() === $this) {
+                $factura->setEmpresa(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Ingreso[]
+     */
+    public function getIngresos(): Collection
+    {
+        return $this->ingresos;
+    }
+
+    public function addIngreso(Ingreso $ingreso): self
+    {
+        if (!$this->ingresos->contains($ingreso)) {
+            $this->ingresos[] = $ingreso;
+            $ingreso->setEmpresa($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIngreso(Ingreso $ingreso): self
+    {
+        if ($this->ingresos->contains($ingreso)) {
+            $this->ingresos->removeElement($ingreso);
+            // set the owning side to null (unless already changed)
+            if ($ingreso->getEmpresa() === $this) {
+                $ingreso->setEmpresa(null);
+            }
+        }
 
         return $this;
     }

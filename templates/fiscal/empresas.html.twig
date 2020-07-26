@@ -50,7 +50,61 @@ $("#tablaEmpresas").dataTable({"order":[[ 0, "desc"]],"language":{"url":"{{asset
               <td>{{empresa.email}}</td>
               <td class="text-center">
                   <a href="{{path('vereditarempresa',{"id":empresa.id})}}" class="btn btn-primary btn-icon-split btn-sm"><span class="icon text-white"><i class="fas fa-fw fa-eye"></i></span><span class="text">Ver</span></a>
+                  <button data-toggle="modal" data-target="#eliminar_empresa_{{empresa.id}}" type="button" class="btn btn-danger btn-icon-split btn-sm"><span class="icon text-white"><i class="fas fa-fw fa-eye"></i></span><span class="text">{% trans %}Eliminar{% endtrans %}</span></button>
 
+                    <a class="btn btn-secondary btn-icon-split btn-sm " href="#" role="button" id="dropdownMenuLink_opciones_{{empresa.id}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <span class="icon text-white"><i class="fas fa-fw fa-cog"></i></span><span class="text">Opciones</span>
+                    </a>
+
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink_opciones_{{empresa.id}}">
+                      <a class="dropdown-item" href="{{path('lista_facturas_empresa',{'id':empresa.id})}}"><i class="fa fa-fw fa-file-invoice"></i> &nbsp;{% trans %}Ver Facturas{% endtrans %}</a>
+                      <a class="dropdown-item" href="{{path('nueva_factura')}}?id_empresa={{empresa.id}}"><i class="fa fa-fw fa-plus"></i> &nbsp;{% trans %}Nueva Factura{% endtrans %}</a>
+                      <a class="dropdown-item" href="{{path('lista_ingresos_empresa',{'id':empresa.id})}}"><i class="fa fa-fw fa-cash-register"></i> &nbsp;{% trans %}Ver Ingresos{% endtrans %}</a>
+                      <a class="dropdown-item" href="{{path('nuevo_ingreso_desde_empresa',{'id':empresa.id})}}"><i class="fa fa-fw fa-plus"></i> &nbsp;{% trans %}Nuevo Ingreso{% endtrans %}</a>
+                      <a class="dropdown-item" href="{{path('lista_gastos_empresa',{'id':empresa.id})}}"><i class="fa fa-fw fa-wallet"></i> &nbsp;{% trans %}Ver Gastos{% endtrans %}</a>
+                      <a class="dropdown-item" href="{{path('nuevo_gasto_desde_empresa',{'id':empresa.id})}}"><i class="fa fa-fw fa-plus"></i> &nbsp;{% trans %}Nuevo Gasto{% endtrans %}</a>
+                    </div>
+
+                  <!-- Modal -->
+                  <div class="modal fade text-center" id="eliminar_empresa_{{empresa.id}}" tabindex="-1" role="dialog" aria-labelledby="eliminar_empresa_{{empresa.id}}_label" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="eliminar_empresa_{{empresa.id}}_label">{% trans %}Eliminar empresa{% endtrans %}{{empresa.nombrecomercial}}</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="alert alert-danger">
+                              <p class="text-danger">{% trans %}¿Estás seguro de que deseas eliminar la siguiente empresa?{% endtrans %}</p>
+                              <p class="text-danger">
+                                NIF: <b>{{empresa.nif}}</b><br>
+                                Nombre Comercial: <b>{{empresa.nombrecomercial}}</b><br>
+                                Razón Social: <b>{{empresa.razonsocial}}</b>
+                                <hr/>
+                                {% if empresa.presupuestos.count or empresa.facturas.count or empresa.gastos.count  or empresa.ingresos.count %}
+                                <div class="text-white p-2" style="border:2px dotted red;background:red">
+                                <i class="text-white">No se puede borrar ya que existen los siguientes elementos asociados<hr></i>
+                                  {% if empresa.presupuestos.count %}Presupuestos asociados: {{empresa.presupuestos.count}}<br/>{% endif %}
+                                  {% if empresa.facturas.count %}Facturas asociadas: {{empresa.facturas.count}}<br/>{% endif %}
+                                  {% if empresa.gastos.count %}Gastos asociados: {{empresa.gastos.count}}<br/>{% endif %}
+                                  {% if empresa.ingresos.count %}Ingresos asociados: {{empresa.ingresos.count}}<br/>{% endif %}
+                                </div>
+                                {% endif %}
+
+                              </p>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          {% if not empresa.presupuestos.count and not empresa.facturas.count and not empresa.gastos.count  and not empresa.ingresos.count%}
+                          <a href="{{path('eliminar_empresa',{'id':empresa.id})}}" class="btn btn-danger"><i class="fa fa-exclamation-triangle"></i>&nbsp; {% trans %}Eliminar Empresa{% endtrans %}</a>
+                          {% endif %}
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
               </td>
             </tr>
             {% endfor %}

@@ -10,22 +10,10 @@ use Symfony\Component\HttpFoundation\Request;
 /*use Symfony\Component\Serializer\SerializerInterface;*/
 
 use Symfony\Contracts\Translation\TranslatorInterface;
-
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\RangeType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Serializer;
-
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 //Entidades
@@ -44,14 +32,13 @@ use App\Form\LineaPresupuestoType;
 //Servicios
 use App\Service\PDFGenerator;
 
-/**
- * @IsGranted("ROLE_CRM")
- */
+
 class CRMController extends AbstractController
 {
 
   /**
   * @Route("/{_locale}/kanban", name="kanban")
+  * @IsGranted("ROLE_CRM")
   */
   public function tableroKanban(Request $request)
   {
@@ -102,6 +89,7 @@ class CRMController extends AbstractController
 
   /**
   * @Route("/{_locale}/columna/{id}", name="ver_editar_columna_kanban")
+  * @IsGranted("ROLE_CRM")
   */
   public function verEditarColumnaKanban($id, Request $request)
   {
@@ -129,6 +117,7 @@ class CRMController extends AbstractController
 
   /**
   * @Route("/{_locale}/columna/{id}/eliminar", name="eliminar_columna_kanban")
+  * @IsGranted("ROLE_CRM")
   */
   public function eliminarColumnaKanban($id)
   {
@@ -156,6 +145,7 @@ class CRMController extends AbstractController
 
   /**
   * @Route("/{_locale}/oportunidad/{id}/ganada", name="oportunidad_venta_ganada")
+  * @IsGranted("ROLE_CRM")
   */
   public function oportunidadVentaGanada($id)
   {
@@ -179,6 +169,7 @@ class CRMController extends AbstractController
 
   /**
   * @Route("/{_locale}/oportunidad/{id}/perdida",  methods={"POST"}, name="oportunidad_venta_perdida")
+  * @IsGranted("ROLE_CRM")
   */
   public function oportunidadVentaPerdida(Request $request, $id)
   {
@@ -203,6 +194,7 @@ class CRMController extends AbstractController
 
   /**
   * @Route("/{_locale}/oportunidad/{id}/eliminar", name="eliminar_oportunidad_venta")
+  * @IsGranted("ROLE_CRM")
   */
   public function eliminarOportunidadVenta($id, Request $request)
   {
@@ -213,7 +205,8 @@ class CRMController extends AbstractController
       die("ERror");
     }
     $entityManager = $this->getdoctrine()->getManager();
-    if($oportunidad->getPresupuesto()!=null)$oportunidad->getPresupuesto()->setOportunidad(null);
+    $oportunidad->setPresupuesto(null);
+    $oportunidad->setFactura(null);
     $entityManager->remove($oportunidad);
     $entityManager->flush();
     return $this->redirectToRoute("kanban");
@@ -221,6 +214,7 @@ class CRMController extends AbstractController
 
   /**
   * @Route("/{_locale}/oportunidad/{id}", name="ver_editar_oportunidad_venta")
+  * @IsGranted("ROLE_CRM")
   */
   public function verEditarOportunidadVenta($id, Request $request)
   {
@@ -246,6 +240,7 @@ class CRMController extends AbstractController
 
   /**
   * @Route("/{_locale}/oportunidades", name="ver_oportunidades")
+  * @IsGranted("ROLE_CRM")
   */
   public function verOportunidades(TranslatorInterface $translator)
   {
@@ -257,6 +252,7 @@ class CRMController extends AbstractController
 
   /**
   * @Route("/{_locale}/oportunidades/ganadas", name="ver_oportunidades_ganadas")
+  * @IsGranted("ROLE_CRM")
   */
   public function verOportunidadesGanadas(TranslatorInterface $translator)
   {
@@ -268,6 +264,7 @@ class CRMController extends AbstractController
 
   /**
   * @Route("/{_locale}/oportunidades/perdidas", name="ver_oportunidades_perdidas")
+  * @IsGranted("ROLE_CRM")
   */
   public function verOportunidadesPerdidas(TranslatorInterface $translator)
   {
@@ -280,6 +277,7 @@ class CRMController extends AbstractController
 
  /**
   * @Route("{_locale}/presupuestos", name="lista_presupuestos")
+  * @IsGranted({"ROLE_CRM", "ROLE_FISCAL"})
   */
   public function listaPresupuestos()
   {
@@ -291,6 +289,7 @@ class CRMController extends AbstractController
 
   /**
   * @Route("{_locale}/presupuesto/nuevo", name="nuevo_presupuesto")
+  * @IsGranted({"ROLE_CRM", "ROLE_FISCAL"})
   */
   public function nuevoPresupuesto(Request $request)
   {
@@ -365,6 +364,7 @@ class CRMController extends AbstractController
 
   /**
   * @Route("/{_locale}/presupuesto/{id}", name="ver_editar_presupuesto")
+  * @IsGranted({"ROLE_CRM", "ROLE_FISCAL"})
   */
   public function verEditarPresupuesto($id, Request $request)
   {
@@ -401,8 +401,31 @@ class CRMController extends AbstractController
 
   }
 
+
+  /**
+  * @Route("/{_locale}/presupuesto/{id}/eliminar", name="eliminar_presupuesto")
+  * @IsGranted({"ROLE_CRM", "ROLE_FISCAL"})
+  */
+  public function eliminarPresupuesto($id, Request $request)
+  {
+    $presupuestoRepository = $this->getDoctrine()->getRepository(Presupuesto::class);
+    $presupuesto = $presupuestoRepository->findOneById($id);
+    if($presupuesto==null)
+      throw $this->createNotFoundException('No existe el presupuesto con ese ID');
+
+    $presupuesto->setOportunidadVenta(null);
+    $em = $this->getDoctrine()->getManager();
+    $em->remove($presupuesto);
+    $em->flush();
+    return $this->redirectToRoute('lista_presupuestos');
+
+
+  }
+
+
   /**
   * @route("/{_locale}/presupuesto/{id}/pdf", name="ver_presupuesto_pdf")
+  * @IsGranted({"ROLE_CRM", "ROLE_FISCAL"})
   */
   public function verPresupuestoPDF($id, PDFGenerator $pdfGenerator)
   {
@@ -412,15 +435,23 @@ class CRMController extends AbstractController
       //TODO: Return error
       die("Error");
     }
+
+    $path = 'img/logo.jpg';
+    $type = pathinfo($path, PATHINFO_EXTENSION);
+    $data = file_get_contents($path);
+    $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+
     // Retrieve the HTML generated in our twig file
     $html = $this->renderView('pdf/presupuesto.html.twig', [
-        'presupuesto'=>$presupuesto
+        'presupuesto'=>$presupuesto,
+        'logo'=>$base64
     ]);
     $pdfGenerator->presupuestoAPDF($html);
   }
 
   /**
   * @Route("/ajax/kanban_columns", name="ajax_kanban_columns")
+  * @IsGranted("ROLE_CRM")
   */
   public function ajaxKanbanColumns()
   {
@@ -451,7 +482,8 @@ class CRMController extends AbstractController
   }
 
   /**
-  *  @Route("/ajax/kanban_columns/order", methods={"POST"}, name="ajax_kanban_columns_order")
+  * @Route("/ajax/kanban_columns/order", methods={"POST"}, name="ajax_kanban_columns_order")
+  * @IsGranted("ROLE_CRM")
   */
   public function ajaxKanbanColumnsOrder(Request $request)
   {
@@ -477,9 +509,9 @@ class CRMController extends AbstractController
     return new Response("{'success':'ok'}",Response::HTTP_OK,['Content-type' => 'application/json']);
   }
 
-
   /**
   * @Route("/ajax/kanban_columns/move_item", methods={"POST"}, name="ajax_kanban_columns_move_item")
+  * @IsGranted("ROLE_CRM")
   */
   public function ajaxKanbanColumnsMoveItem(Request $request)
   {

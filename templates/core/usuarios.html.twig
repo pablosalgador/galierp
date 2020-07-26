@@ -36,6 +36,7 @@ $("#tablaUsuarios").dataTable({"order":[[ 0, "desc"]],"language":{"url":"{{asset
               <th class="text-center">S. Admin.</th>
               <th class="text-center">Admin.</th>
               <th class="text-center">{% trans %}Gestor CRM{% endtrans %}</th>
+              <th class="text-center">{% trans %}Gestor Fiscal{% endtrans %}</th>
               <th class="text-center">{% trans %}Opciones{% endtrans %}</th>
             </tr>
           </thead>
@@ -48,8 +49,47 @@ $("#tablaUsuarios").dataTable({"order":[[ 0, "desc"]],"language":{"url":"{{asset
               <td class="text-center">{% if 'ROLE_SUPER_ADMIN' in usuario.roles %}<i class="fa fa-check text-success"></i>{% endif %}</td>
               <td class="text-center">{% if 'ROLE_ADMIN' in usuario.roles %}<i class="fa fa-check text-success"></i>{% endif %}</td>
               <td class="text-center">{% if 'ROLE_CRM' in usuario.roles %}<i class="fa fa-check text-success"></i>{% endif %}</td>
+              <td class="text-center">{% if 'ROLE_FISCAL' in usuario.roles %}<i class="fa fa-check text-success"></i>{% endif %}</td>
               <td class="text-center">
                   <a href="{{path("vereditarusuario",{"id":usuario.id})}}" class="btn btn-primary btn-icon-split btn-sm"><span class="icon text-white"><i class="fas fa-fw fa-eye"></i></span><span class="text">{% trans %}Ver{% endtrans %}</span></a>
+                  <button data-toggle="modal" data-target="#eliminar_usuario_{{usuario.id}}" type="button" class="btn btn-danger btn-icon-split btn-sm"><span class="icon text-white"><i class="fas fa-fw fa-eye"></i></span><span class="text">{% trans %}Eliminar{% endtrans %}</span></button>
+
+
+                  <!-- Modal -->
+                  <div class="modal fade" id="eliminar_usuario_{{usuario.id}}" tabindex="-1" role="dialog" aria-labelledby="eliminar_usuario_{{usuario.id}}_label" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="eliminar_usuario_{{usuario.id}}_label">Eliminar usuario {{usuario.email}}</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="alert alert-danger">
+                              <p class="text-danger">¿Estás seguro de que deseas eliminar el siguiente usuario?</p>
+                              <p class="text-danger">
+                                Nombre: <b>{{usuario.nombre}}</b><br>
+                                Email: <b>{{usuario.email}}</b>
+                                <hr/>
+                                {% if usuario.oportunidadesventas.count %}
+                                <div class="text-white p-2" style="border:2px dotted red;background:red">
+                                <i class="text-white">No se puede borrar ya que existen los siguientes elementos asociados<hr></i>
+                                  {% if usuario.oportunidadesventas.count %}Oportunidades de venta: {{usuario.oportunidadesventas.count}}<br/>{% endif %}
+                                </div>
+                                {% endif %}
+                              </p>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          {% if not usuario.oportunidadesventas.count %}
+                            <a href="{{path('eliminar_usuario',{'id':usuario.id})}}" class="btn btn-danger"><i class="fa fa-exclamation-triangle"></i>&nbsp; Eliminar Permanentemente</a>
+                          {% endif %}
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
               </td>
             </tr>

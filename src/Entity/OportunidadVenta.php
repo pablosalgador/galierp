@@ -83,6 +83,11 @@ class OportunidadVenta
      */
     private $presupuesto;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Factura", inversedBy="oportunidadVenta")
+     */
+    private $factura;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -240,6 +245,24 @@ class OportunidadVenta
     public function setPresupuesto(?Presupuesto $presupuesto): self
     {
         $this->presupuesto = $presupuesto;
+
+        return $this;
+    }
+
+    public function getFactura(): ?Factura
+    {
+        return $this->factura;
+    }
+
+    public function setFactura(?Factura $factura): self
+    {
+        $this->factura = $factura;
+
+        // set (or unset) the owning side of the relation if necessary
+        /*$newOportunidadVenta = $factura === null ? null : $this;
+        if ($newOportunidadVenta !== $factura->getOportunidadVenta()) {
+            $factura->setOportunidadVenta($newOportunidadVenta);
+        }*/
 
         return $this;
     }

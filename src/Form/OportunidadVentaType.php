@@ -11,7 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\RangeType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -38,9 +38,21 @@ class OportunidadVentaType extends AbstractType
           'placeholder'=>'-',
           'required'=>false
         ])
+        ->add('ganada', CheckBoxType::class,[
+          'required'=>false
+        ])
+        ->add('perdida', CheckBoxType::class,[
+          'required'=>false
+        ])
+        ->add('motivoperdida',  TextAreaType::class,[
+          'label'=>'Motivo Pérdida',
+          'required'=>false
+        ])
         ->add('columna_kanban', EntityType::class, [
           'class' => ColumnaKanban::class,
-          'choice_label' => 'nombre',])
+          'choice_label' => 'nombre',
+          'placeholder'=>'-',
+          'required'=>false])
           ->add('ingreso_estimado', NumberType::class, ['scale'=> 2])
           ->add('porcentaje_exito_estimado', RangeType::class, ['attr'=>['min'=>0,'max'=>1,'step'=>0.05]])
           ->add('guardar', SubmitType::class, ['label'=> $options['label_guardar']])

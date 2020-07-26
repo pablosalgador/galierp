@@ -3,4 +3,4 @@ controllers:
     type: annotation
     prefix:
       gl: ''
-      es: '/es'
+      es: ''

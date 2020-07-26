@@ -7,6 +7,8 @@ parameters:
     app.prefijo_presupuesto: 'PRESU'
     app.max_presu: 4
     app.dias_validez_defecto: 15
+    app.serie_factura: '2020'
+    app.max_factura: 4
 
 services:
     # default configuration for services in *this* file

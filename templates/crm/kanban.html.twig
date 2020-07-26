@@ -54,7 +54,21 @@ var ver_editar_oportunidad_venta_url = '{{absolute_url("oportunidad")}}';
 var ver_editar_columna_kanban_url = '{{absolute_url('columna')}}';
 var nuevo_presupuesto_url = '{{path("nuevo_presupuesto")}}';
 var ver_editar_presupuesto_url = '{{absolute_url("presupuesto")}}';
-var texto_traducido = {'eliminar_columna': '{% trans %}Eliminar Columna{% endtrans %}' ,'estas_seguro':'{% trans %} ¿Estás seguro que deseas eliminar esta columna? {% endtrans %}','cancelar':'{% trans %}Cancelar{% endtrans %}'};
+var nueva_factura_desde_oportunidad_url = '{{absolute_url("factura/nueva/oportunidad")}}';
+var ver_factura_url = '{{absolute_url("factura")}}';
+var texto_traducido = {
+  'Eliminar Oportunidad': '{% trans %}Eliminar Oportunidad{% endtrans %}',
+  'Nuevo Presupuesto':'{% trans %}Nuevo Presupuesto{% endtrans %}',
+  'Ver Presupuesto':'{% trans %}Ver Presupuesto{% endtrans %}',
+  'Nueva Factura':'{% trans %}Nueva Factura{% endtrans %}',
+  'Ver Factura':'{% trans %}Ver Factura{% endtrans %}',
+  'Marcar como perdida':'{% trans %}Marcar como perdida{% endtrans %}',
+  'Marcar como ganada':'{% trans %}Marcar como ganada{% endtrans %}',
+  'eliminar_columna': '{% trans %}Eliminar Columna{% endtrans %}' ,
+  'estas_seguro':'{% trans %} ¿Estás seguro que deseas eliminar esta columna? {% endtrans %}',
+  'no_se_podra':'{% trans %}No se podrá eliminar si contiene oportunidades{% endtrans %}',
+  'cancelar':'{% trans %}Cancelar{% endtrans %}'
+};
 
 var panel_oportunidades;
 $(document).ready(function(){
@@ -72,7 +86,10 @@ $(document).ready(function(){
           ajax_kanban_columns_move_item_url,
           ver_editar_oportunidad_venta_url,
           ver_editar_presupuesto_url,
-          nuevo_presupuesto_url
+          nuevo_presupuesto_url,
+          nueva_factura_desde_oportunidad_url,
+          ver_factura_url,
+          texto_traducido
         );
         //$(".kanban-item > div > a").click(function(e){ e.stopPropagation();});
         $(".kanban-item > div > div").click(function(e){ e.stopPropagation();});
@@ -108,7 +125,7 @@ $(document).ready(function(){
                     </button>
                   </div>
                   <div class="modal-body text-danger">
-                    ` + texto_traducido.estas_seguro + `<br><i class="text-secondary">(No se podrá eliminar si contiene oportunidades)</i>
+                    ` + texto_traducido.estas_seguro + `<br><i class="text-secondary">(` + texto_traducido.no_se_podra + `)</i>
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">` + texto_traducido.cancelar + `</button>

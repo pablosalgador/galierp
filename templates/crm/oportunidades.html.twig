@@ -4,40 +4,101 @@
 <hr/>
 <div class="row">
   <div class="col-md-12">
-    {% for oportunidad in oportunidades %}
-
-      <div class="card p-4 text-gray-800 mt-4">
-        <div class="row">
-          <div class="col-md-3"><b class="d-block">Titulo:</b>{{oportunidad.nombre}}</div>
-          <div class="col-md-3"><b class="d-block">Fecha:</b>{{oportunidad.fechaCreacion | date('d/M/Y')}}</div>
-          <div class="col-md-3"><b class="d-block">Responsable:</b>{{oportunidad.responsable.email}}</div>
-          <div class="col-md-3"><b class="d-block">Cliente:</b>{{oportunidad.cliente.nombreComercial}}</div>
+    <div class="row">
+      {% if not oportunidades %}
+        <div class="col-md-12">
+          <div class="alert alert-danger">
+              <p class="text-danger">{% trans %}No existen oportunidades de venta{% endtrans %}</p>
+          </div>
         </div>
-        
-        <div class="row mt-3">
-          <div class="col-md-3">
-            <b class="d-block">Estado:</b>
-            {% if oportunidad.ganada %}<span class="text-success"><i class="fa fa-thumbs-up"></i> Ganada</span>
-            {% elseif oportunidad.perdida  %}<span class="text-danger"><i class="fa fa-thumbs-down"></i> Perdida</span>
-            {% else %}<span class="text-info"><i class="fa fa-asterisk"></i> En Panel Kanban</span>
+      {% endif %}
+    {% for oportunidad in oportunidades %}
+      <div class="col-md-12 col-lg-6">
+      <div class="card text-gray-800 mt-4">
+        <div class="card-header bg-primary text-white">
+          <b>{{oportunidad.nombre}}</b>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-3">
+              <b class="d-block">Estado:</b>
+              {% if oportunidad.perdida  %}<span class="text-danger"><i class="fa fa-thumbs-down"></i> Perdida</span>
+              {% elseif oportunidad.ganada %}<span class="text-success"><i class="fa fa-thumbs-up"></i> Ganada</span>
+              {% elseif oportunidad.columnakanban%}<span class="text-info"><i class="fa fa-asterisk"></i> En Panel Kanban (<b>{{oportunidad.columnakanban.nombre}}</b>)</span>
+              {% else %}<span class="text-warning"><i class="fa fa-exclamation-triangle"></i> Sin asignar</span>
+              {% endif %}
+            </div>
+            <div class="col-md-3"><b class="d-block">Fecha:</b>{{oportunidad.fechaCreacion | date('d/M/Y')}}</div>
+            <div class="col-md-3"><b class="d-block">Ingreso Estimado:</b>{{oportunidad.ingresoEstimado | number_format(2)}} €</div>
+            <div class="col-md-3"><b class="d-block">Porcentaje Estimado:</b>{{oportunidad.porcentajeExitoEstimado*100 | number_format(2)}} %</div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-md-6"><b class="d-block">Responsable:</b>{{oportunidad.responsable.email}}</div>
+            <div class="col-md-6"><b class="d-block">Cliente:</b>{{oportunidad.cliente.nombreComercial}}</div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-md-6"><b class="d-block">Descripcion</b>{{oportunidad.descripcion}}</div>
+
+          </div>
+
+          <div class="row mt-3">
+            {% if oportunidad.perdida %}
+              <div class="alert alert-danger col-md-12"><b class="d-block">Motivo pérdida</b>{{oportunidad.motivoperdida}}</div>
             {% endif %}
           </div>
-          <div class="col-md-3"><b class="d-block">Ingreso Estimado:</b>{{oportunidad.ingresoEstimado | number_format(2)}} €</div>
-          <div class="col-md-3"><b class="d-block">Porcentaje Estimado:</b>{{oportunidad.porcentajeExitoEstimado*100 | number_format(2)}} %</div>
-          <div class="col-md-3"><b class="d-block mb-1">Opciones:</b>
+          <hr>
+          {% if oportunidad.presupuesto %}
+          <a href="{{path("ver_editar_presupuesto",{"id":oportunidad.presupuesto.id})}}" class="btn btn-info btn-icon-split btn-sm"><span class="icon text-white"><i class="fas fa-fw fa-eye"></i></span><span class="text">{% trans %}Ver Presupuesto{% endtrans %}</span></a>
+          {% else %}
+          <a href="{{path('nuevo_presupuesto')}}?id_oportunidad={{oportunidad.id}}" class="btn btn-primary btn-icon-split btn-sm"><span class="icon text-white"><i class="fas fa-fw fa-plus"></i></span><span class="text">{% trans %}Crear Presupuesto{% endtrans %}</span></a>
+          {% endif %}
 
-            <a href="{{path('ver_editar_oportunidad_venta',{'id':oportunidad.id})}}" class="btn btn-circle btn-primary btn-sm"><i class="fa fa-fw fa-edit"></i></a>
-            <a href="#" class="btn btn-circle btn-info btn-sm"><i class="fa fa-fw fa-file"></i></a>
-            <a href="#" class="btn btn-circle btn-danger btn-sm mr-1"><i class="fa fa-fw fa-trash"></i></a>
-          </div>
+          {% if oportunidad.factura %}
+          <a href="{{path("ver_factura",{"id":oportunidad.factura.id})}}" class="btn btn-info btn-icon-split btn-sm"><span class="icon text-white"><i class="fas fa-fw fa-eye"></i></span><span class="text">{% trans %}Ver Factura{% endtrans %}</span></a>
+          {% else %}
+          <a href="{{path("nueva_factura_desde_oportunidad",{"id":oportunidad.id})}}" class="btn btn-primary btn-icon-split btn-sm"><span class="icon text-white"><i class="fas fa-fw fa-plus"></i></span><span class="text">{% trans %}Nueva Factura{% endtrans %}</span></a>
+          {% endif %}
+
+
         </div>
 
-        <div class="row mt-3">
-          <div class="col-md-6"><b class="d-block">Descripcion</b>{{oportunidad.descripcion}}</div>
+        <div class="card-footer text-right bg-gray-200">
+
+          <a href="{{path('ver_editar_oportunidad_venta',{'id':oportunidad.id})}}" class="btn btn-info btn-icon-split btn-sm"><span class="icon text-white"><i class="fas fa-fw fa-edit"></i></span><span class="text">{% trans %}Editar{% endtrans %}</span></a>
+          <button data-toggle="modal" data-target="#eliminar_oportunidad_{{oportunidad.id}}" type="button" class="btn btn-danger btn-icon-split btn-sm"><span class="icon text-white"><i class="fas fa-fw fa-eye"></i></span><span class="text">{% trans %}Eliminar{% endtrans %}</span></button>
+          <!-- Modal -->
+          <div class="modal fade text-center" id="eliminar_oportunidad_{{oportunidad.id}}" tabindex="-1" role="dialog" aria-labelledby="eliminar_oportunidad_{{oportunidad.id}}_label" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="eliminar_oportunidad_{{oportunidad.id}}_label">Eliminar oportunidad {{oportunidad.nombre}}</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div class="alert alert-danger">
+                      <p class="text-danger">¿Estás seguro de que deseas eliminar el siguiente cliente?</p>
+                      <p class="text-danger">
+                        Nombre: <b>{{oportunidad.nombre}}</b><br>
+                        Descripcion: <b>{{oportunidad.descripcion}}</b>
+                      </p>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <a href="{{path('eliminar_oportunidad_venta',{'id':oportunidad.id})}}" class="btn btn-danger"><i class="fa fa-exclamation-triangle"></i>&nbsp; Eliminar Oportunidad</a>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
 
         </div>
       </div>
+    </div>
     {% endfor %}
+  </div>
   </div>
 </div>
 

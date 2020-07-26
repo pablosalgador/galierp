@@ -9,11 +9,6 @@
   <!-- Divider -->
   <hr class="sidebar-divider my-0">
   <li class="nav-item">
-    <a class="nav-link" href="{{path("dashboard")}}">
-      <i class="fas fa-fw fa-tachometer-alt"></i>
-      <span>Escritorio</span></a>
-  </li>
-  <li class="nav-item">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#navclientes" aria-expanded="true" aria-controls="navclientes">
       <i class="fas fa-fw fa-user-tie"></i>
       <span>Clientes</span>
@@ -42,8 +37,30 @@
   {% endif %}
   <!-- End Sidebar -->
 
+  <!-- Sidebar (Compartida por fiscal y crm )-->
+  {% if is_granted('ROLE_CRM') or is_granted('ROLE_FISCAL') %}
+  <li class="nav-item">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#navpresupuestos" aria-expanded="true" aria-controls="navpresupuestos">
+      <i class="fas fa-fw fa-file-invoice"></i>
+      <span>{% trans %}Presupuestos{% endtrans %}</span>
+    </a>
+    <div id="navpresupuestos" class="collapse" aria-labelledby="navpresupuestos" data-parent="#accordionSidebar">
+      <div class="bg-white py-2 collapse-inner rounded">
+        <h6 class="collapse-header">{% trans %}Presupuestos{% endtrans %}</h6>
+        <a class="collapse-item" href="{{path('lista_presupuestos')}}"><i class="fas fa-bell fa-file-invoice"></i> &nbsp;{% trans %}Ver Lista{% endtrans %}</a>
+        <a class="collapse-item" href="{{path('nuevo_presupuesto')}}"><i class="fas fa-bell fa-file-medical"></i> &nbsp;{% trans %}Nuevo{% endtrans %}</a>
+      </div>
+    </div>
+  </li>
+  <!-- Divider -->
+  <hr class="sidebar-divider d-none d-md-block">
+  {% endif %}
+  <!-- Fin Sidebar (Compartida por fiscal y crm )-->
+
   <!-- Sidebar: Fiscal -->
-  {% include 'nav/navbar-fiscal.html.twig' %}
+  {% if is_granted('ROLE_FISCAL') %}
+    {% include 'nav/navbar-fiscal.html.twig' %}
+  {% endif %}
   <!-- Fin sidebar: Fiscal -->
 
   <!-- Sidebar Toggler (Sidebar) -->

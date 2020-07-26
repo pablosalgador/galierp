@@ -51,6 +51,7 @@ class Usuario implements UserInterface
      */
     private $oportunidadesVentas;
 
+
     public function __construct()
     {
         $this->oportunidadesVentas = new ArrayCollection();
@@ -188,4 +189,5 @@ class Usuario implements UserInterface
 
         return $this;
     }
+
 }

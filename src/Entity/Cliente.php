@@ -98,10 +98,16 @@ class Cliente
      */
     private $presupuestos;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Factura", mappedBy="cliente")
+     */
+    private $facturas;
+
     public function __construct()
     {
         $this->oportunidadesVentas = new ArrayCollection();
         $this->presupuestos = new ArrayCollection();
+        $this->facturas = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -333,6 +339,37 @@ class Cliente
             // set the owning side to null (unless already changed)
             if ($presupuesto->getCliente() === $this) {
                 $presupuesto->setCliente(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Factura[]
+     */
+    public function getFacturas(): Collection
+    {
+        return $this->facturas;
+    }
+
+    public function addFactura(Factura $factura): self
+    {
+        if (!$this->facturas->contains($factura)) {
+            $this->facturas[] = $factura;
+            $factura->setCliente($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFactura(Factura $factura): self
+    {
+        if ($this->facturas->contains($factura)) {
+            $this->facturas->removeElement($factura);
+            // set the owning side to null (unless already changed)
+            if ($factura->getCliente() === $this) {
+                $factura->setCliente(null);
             }
         }
 

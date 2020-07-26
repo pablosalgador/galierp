@@ -3,6 +3,7 @@
   Fiscal
 </div>
 
+
 <li class="nav-item">
   <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#navempresas" aria-expanded="true" aria-controls="navempresas">
     <i class="fas fa-fw fa-building"></i>
@@ -13,6 +14,77 @@
       <h6 class="collapse-header">{% trans %}Gestión de empresas{% endtrans %}</h6>
       <a class="collapse-item" href="{{path("listaempresas")}}"><i class="fas fa-fw fa-building"></i> &nbsp;{% trans %}Ver Lista{% endtrans %}</a>
       <a class="collapse-item" href="{{path("nuevaempresa")}}"><i class="fas fa-fw fa-plus"></i> &nbsp;{% trans %}Añadir Nueva{% endtrans %}</a>
+    </div>
+  </div>
+</li>
+
+<li class="nav-item">
+  <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#navproveedores" aria-expanded="true" aria-controls="navproveedores">
+    <i class="fas fa-fw fa-truck"></i>
+    <span>{% trans %}Proveedores{% endtrans %}</span>
+  </a>
+  <div id="navproveedores" class="collapse" aria-labelledby="navproveedores" data-parent="#accordionSidebar">
+    <div class="bg-white py-2 collapse-inner rounded">
+      <h6 class="collapse-header">{% trans %}Gestión de proveedores{% endtrans %}</h6>
+      <a class="collapse-item" href="{{path("lista_proveedores")}}"><i class="fas fa-fw fa-truck"></i> &nbsp;{% trans %}Ver Lista{% endtrans %}</a>
+      <a class="collapse-item" href="{{path("nuevo_proveedor")}}"><i class="fas fa-fw fa-plus"></i> &nbsp;{% trans %}Añadir Nuevo{% endtrans %}</a>
+    </div>
+  </div>
+</li>
+
+<li class="nav-item">
+  <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#navfacturas" aria-expanded="true" aria-controls="navfacturas">
+    <i class="fas fa-fw fa-file-invoice"></i>
+    <span>{% trans %}Facturas{% endtrans %}</span>
+  </a>
+  <div id="navfacturas" class="collapse" aria-labelledby="navfacturas" data-parent="#accordionSidebar">
+    <div class="bg-white py-2 collapse-inner rounded">
+      <h6 class="collapse-header">{% trans %}Facturas{% endtrans %}</h6>
+      <a class="collapse-item" href="{{path("lista_facturas")}}"><i class="fas fa-fw fa-file-invoice"></i> &nbsp;{% trans %}Lista de facturas{% endtrans %}</a>
+      <a class="collapse-item" href="{{path("nueva_factura")}}"><i class="fas fa-fw fa-plus"></i> &nbsp;{% trans %}Añadir Nueva{% endtrans %}</a>
+    </div>
+  </div>
+</li>
+
+
+<li class="nav-item">
+  <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#navingresos" aria-expanded="true" aria-controls="navingresos">
+    <i class="fas fa-fw fa-cash-register"></i>
+    <span>{% trans %}Ingresos{% endtrans %}</span>
+  </a>
+  <div id="navingresos" class="collapse" aria-labelledby="navingresos" data-parent="#accordionSidebar">
+    <div class="bg-white py-2 collapse-inner rounded">
+      <h6 class="collapse-header">{% trans %}Ingresos{% endtrans %}</h6>
+      <a class="collapse-item" href="{{path("lista_ingresos")}}"><i class="fas fa-fw fa-cash-register"></i> &nbsp;{% trans %}Lista de ingresos{% endtrans %}</a>
+      <a class="collapse-item" href="{{path("nuevo_ingreso")}}"><i class="fas fa-fw fa-plus"></i> &nbsp;{% trans %}Añadir Nuevo{% endtrans %}</a>
+    </div>
+  </div>
+</li>
+
+
+<li class="nav-item">
+  <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#navgastos" aria-expanded="true" aria-controls="navgastos">
+    <i class="fas fa-fw fa-receipt"></i>
+    <span>{% trans %}Gastos{% endtrans %}</span>
+  </a>
+  <div id="navgastos" class="collapse" aria-labelledby="navgastos" data-parent="#accordionSidebar">
+    <div class="bg-white py-2 collapse-inner rounded">
+      <h6 class="collapse-header">{% trans %}Gastos{% endtrans %}</h6>
+      <a class="collapse-item" href="{{path("lista_gastos")}}"><i class="fas fa-fw fa-receipt"></i> &nbsp;{% trans %}Lista de gastos{% endtrans %}</a>
+      <a class="collapse-item" href="{{path("nuevo_gasto")}}"><i class="fas fa-fw fa-plus"></i> &nbsp;{% trans %}Añadir Nuevo{% endtrans %}</a>
+    </div>
+  </div>
+</li>
+
+<li class="nav-item">
+  <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#navresumenfiscal" aria-expanded="true" aria-controls="navresumenfiscal">
+    <i class="fas fa-fw fa-money-check"></i>
+    <span>{% trans %}Resumen Fiscal{% endtrans %}</span>
+  </a>
+  <div id="navresumenfiscal" class="collapse" aria-labelledby="navresumenfiscal" data-parent="#accordionSidebar">
+    <div class="bg-white py-2 collapse-inner rounded">
+      <h6 class="collapse-header">{% trans %}Resumen Fiscal{% endtrans %}</h6>
+      <a class="collapse-item" href="{{path("resumen_fiscal")}}"><i class="fas fa-fw fa-money-check"></i> &nbsp;{% trans %}Resumen Fiscal{% endtrans %}</a>
     </div>
   </div>
 </li>

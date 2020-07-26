@@ -1,7 +1,7 @@
 
 class PanelOportunidades{
 
-  constructor(data, htmlElement, moveKanbanColumnURL, moveKanbanItemURL, verEditarOportunidadURL, verPresupuestoURL, nuevoPresupuestoURL){
+  constructor(data, htmlElement, moveKanbanColumnURL, moveKanbanItemURL, verEditarOportunidadURL, verPresupuestoURL, nuevoPresupuestoURL, nuevaFacturaDesdeOportunidadURL, verFacturaURL, textoTraducido){
     this.data = data;
     this.htmlElement = htmlElement;
     this.moveKanbanColumnURL = moveKanbanColumnURL;
@@ -9,6 +9,9 @@ class PanelOportunidades{
     this.verEditarOportunidadURL = verEditarOportunidadURL;
     this.verPresupuestoURL = verPresupuestoURL;
     this.nuevoPresupuestoURL = nuevoPresupuestoURL;
+    this.nuevaFacturaDesdeOportunidadURL = nuevaFacturaDesdeOportunidadURL;
+    this.verFacturaURL = verFacturaURL;
+    this.textoTraducido = textoTraducido;
     this.init();
   }
 
@@ -52,17 +55,19 @@ class PanelOportunidades{
         htmlAppend += '<br><b>Cliente</b> <span class="float-right text-gray-600">' + $(item).data('nombre_comercial_cliente') + '</span>';
         htmlAppend += '<br><b>Responsable</b> <span class="float-right text-gray-600">' + $(item).data('responsable') + '</span>';
         htmlAppend += '<br/><b>Creada:</b> <span class="float-right text-gray-600">' + $(item).data('fechacreacion') + '</span>';
-        htmlAppend += '<br/><b>Ingreso Estiamdo:</b> <span class="float-right text-gray-600">' + $(item).data('ingresoestimado') + ' €</span>';
+        htmlAppend += '<br/><b>Ingreso Estimado:</b> <span class="float-right text-gray-600">' + $(item).data('ingresoestimado') + ' €</span>';
         htmlAppend += '<br/><b>Porc. Exito Estimado</b> <span class="float-right text-gray-600">' + $(item).data('porcentajeexitoestimado')*100 + ' %</span>';
         htmlAppend += '<hr/><div><a href="' + this.verEditarOportunidadURL + '/' + id + '" class="btn btn-info btn-circle mr-2"><i class="fa fa-fw fa-edit"></i></a>';
-        htmlAppend += '<a href="' + this.verEditarOportunidadURL + '/' + id + '/ganada" class="btn btn-success btn-circle mr-2"><i class="fa fa-fw fa-check"></i></a>';
-        htmlAppend += '<a href="javascript:void(0)" onclick=\'$("#motivo-perdida-' + id + '").slideToggle();\' class="btn btn-warning btn-circle mr-2"><i class="fa fa-fw fa-times"></i></a>';
-        htmlAppend += '<a href="' + this.verEditarOportunidadURL + '/' + id + '/eliminar" onclick="return confirm(\'¿Seguro que deseas eliminar este elemento?\');" class="btn btn-danger btn-circle mr-2"><i class="fa fa-fw fa-trash"></i></a>';
-        htmlAppend += '<a href="' + (ele.presupuesto==null?this.nuevoPresupuestoURL + '?id_oportunidad=' + ele.id:this.verPresupuestoURL + '/' + ele.presupuesto.id) + '" class="btn btn-primary btn-circle mr-2"><i class="fa fa-fw fa-' + (ele.presupuesto==null?'plus':'file-invoice') + '"></i></a></div>';
+        htmlAppend += '<a  data-toggle="tooltip" data-placement="top" title="' + this.textoTraducido['Marcar como ganada'] + '" href="' + this.verEditarOportunidadURL + '/' + id + '/ganada" class="btn btn-success btn-circle mr-2"><i class="fa fa-fw fa-check"></i></a>';
+        htmlAppend += '<a  data-toggle="tooltip" data-placement="top" title="' + this.textoTraducido['Marcar como perdida'] + '" href="javascript:void(0)" onclick=\'$("#motivo-perdida-' + id + '").slideToggle();\' class="btn btn-warning btn-circle mr-2"><i class="fa fa-fw fa-times"></i></a>';
+        htmlAppend += '<a  data-toggle="tooltip" data-placement="top" title="' + this.textoTraducido['Eliminar Oportunidad'] + '" href="' + this.verEditarOportunidadURL + '/' + id + '/eliminar" onclick="return confirm(\'¿Seguro que deseas eliminar este elemento?\');" class="btn btn-danger btn-circle mr-2"><i class="fa fa-fw fa-trash"></i></a>';
+        htmlAppend += '<a data-toggle="tooltip" data-placement="top" title="' + (ele.presupuesto==null?this.textoTraducido['Nuevo Presupuesto']:this.textoTraducido['Ver Presupuesto']) + '" href="' + (ele.presupuesto==null?this.nuevoPresupuestoURL + '?id_oportunidad=' + ele.id:this.verPresupuestoURL + '/' + ele.presupuesto.id) + '" class="btn btn-primary btn-circle mr-2"><i class="fa fa-fw fa-' + (ele.presupuesto==null?'plus':'file-invoice') + '"></i></a>';
+        htmlAppend += '<a data-toggle="tooltip" data-placement="top" title="' + (ele.factura==null?this.textoTraducido['Nueva Factura']:this.textoTraducido['Ver Factura']) + '" href="' + (ele.factura==null?this.nuevaFacturaDesdeOportunidadURL + '/' + ele.id:this.verFacturaURL + '/' + ele.factura.id) + '" class="btn btn-info btn-circle mr-2"><i class="fa fa-fw fa-' + (ele.factura==null?'plus':'file-invoice-dollar') + '"></i></a></div>';
         htmlAppend += '<div id="motivo-perdida-' + id + '" class="pt-2 mt-3 alert alert-warning" style="display:none"><form action="' + this.verEditarOportunidadURL + '/' + id + '/perdida" method="POST"><label>Motivo:</label><input type="text" required class="form-control" name="motivo-perdida"></input><input type="submit" class="btn btn-warning mt-1 btn-block" value="Perdido"></form></div>';
         htmlAppend += '</div>';
-        $(item).append(htmlAppend);
 
+        $(item).append(htmlAppend);
+          $('[data-toggle="tooltip"]').tooltip()
       }
 
 

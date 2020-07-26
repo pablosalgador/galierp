@@ -1,0 +1,82 @@
+{% extends 'admin.html.twig' %}
+{% block content %}
+<h1 class="h3 mb-2 font-weight-bold text-gray-800"><i class="fas fa-fw fa-file-invoice"></i>
+{% trans %}Ver Factura{% endtrans %} {{factura.serie}}/{{factura.numerofactura}}
+</h1>
+
+<hr/>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="bg-white p-4" style="border:2px solid #36b9cc">
+        <div style="border: 2px dotted black;" class="bg-info text-center text-white p-4 mb-4"><h2><i class="fa fa-info-circle"></i> &nbsp;{% trans %}Información de la factura{% endtrans %}</h2></div>
+        <div class="row">
+          <div class="col-md-6"><p><b>{% trans %}Serie{% endtrans %}: </b>{{ factura.serie }}</p></div>
+          <div class="col-md-6"><p><b>{% trans %}Número{% endtrans %}: </b>{{ factura.numerofactura }}</p></div>
+          <div class="col-md-6"><p><b>{% trans %}Fecha Emisión{% endtrans %}: </b>{{ factura.fechaemision | date('d/M/Y') }}</p></div>
+          <div class="col-md-6"><p><b>{% trans %}IRPF{% endtrans %}: </b>{{ (factura.irpf) ? factura.irpf * 100 : '0' }}%</p></div>
+          <div class="col-md-6"><p><b>{% trans %}Oportunidad{% endtrans %}: </b>{{ (factura.oportunidadVenta) ? factura.oportunidadVenta.nombre : '-' }}</p></div>
+          <div class="col-md-6"><p><b>{% trans %}Cliente{% endtrans %}: </b>{{ factura.cliente.razonsocial }}</p></div>
+          <div class="col-md-12"><p><b>{% trans %}Empresa{% endtrans %}: </b>{{ factura.empresa.razonsocial }}</p></div>
+        </div>
+
+
+        <div style="border: 2px dotted black;" class="bg-info text-center text-white p-4 mb-4"><h2><i class="fa fa-list"></i> &nbsp;Conceptos</h2></div>
+
+
+        <div class="row font-weight-bold text-gray-800">
+          <div class="col-md-5">{% trans %}Concepto{% endtrans %}</div>
+          <div class="col-md-1">{% trans %}Cant.{% endtrans %}</div>
+          <div class="col-md-2">{% trans %}Precio{% endtrans %}</div>
+          <div class="col-md-1">{% trans %}Descuento{% endtrans %}</div>
+          <div class="col-md-1">{% trans %}IVA{% endtrans %}</div>
+          <div class="col-md-2 text-right">{% trans %}Subtotal{% endtrans %}</div>
+
+        </div>
+
+        {% for linea in factura.lineas %}
+        <div class="row mt-3 js-linea-factura-row">
+          <div class="col-md-5">{{linea.concepto}}</div>
+          <div class="col-md-1">{{linea.cantidad}}</div>
+          <div class="col-md-2">{{linea.precio | number_format(2)}} €</div>
+          <div class="col-md-1">{{linea.descuento | number_format(2)}} €</div>
+          <div class="col-md-1">{{linea.iva | number_format(2)}} €</div>
+          <div class="col-md-2 text-right">{{linea.total | number_format(2)}} €</div>
+        </div>
+        {% endfor %}
+
+
+        <div class="row">
+          <div class="col-md-12">
+            <hr/>
+              <div class="row">
+                <div class="col-md-8"></div>
+                <div class="col-md-2 text-right"><h5>{% trans %}Subtotal{% endtrans %}:</h5></div>
+                <div class="col-md-2 text-right"><h4><span class="badge badge-info" id="total-subtotal">{{factura.subtotal}} €</span></h4></div>
+              </div>
+              <div class="row">
+                <div class="col-md-8"></div>
+                <div class="col-md-2 text-right"><h5>{% trans %}IVA{% endtrans %}:</h5></div>
+                <div class="col-md-2 text-right"><h4><span class="badge badge-secondary" id="total-impuestos">{{factura.iva}} €</span></h4></div>
+              </div>
+              <div class="row">
+                <div class="col-md-8"></div>
+                <div class="col-md-2 text-right"><h5>{% trans %}IRPF{% endtrans %}:</h5></div>
+                <div class="col-md-2 text-right"><h4><span class="badge badge-warning" id="total-irpf">{{factura.irpf * factura.subtotal}} €</span></h4></div>
+              </div>
+              <div class="row">
+                <div class="col-md-8"></div>
+                <div class="col-md-2 text-right"><h4 class="font-weight-bold">Total:</h5></div>
+                <div class="col-md-2 text-right"><h3><span class="badge badge-primary" id="total-factura">{{factura.total}} €</span></h3></div>
+              </div>
+
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
