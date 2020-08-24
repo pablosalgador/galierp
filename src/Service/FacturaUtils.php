@@ -88,7 +88,7 @@ class FacturaUtils{
   }
 
 
-  private function fechaInicioTrimestre($trimestre, $ano)
+  public function fechaInicioTrimestre($trimestre, $ano)
   {
     switch($trimestre)
     {
@@ -108,7 +108,7 @@ class FacturaUtils{
     return new \DateTime($ano . '-01-01');
   }
 
-  private function fechaFinTrimestre($trimestre, $ano)
+  public function fechaFinTrimestre($trimestre, $ano)
   {
     switch($trimestre)
     {
