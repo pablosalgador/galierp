@@ -3,8 +3,8 @@
 Software de gestión empresarial (ERP) para autónomos y pequeñas empresas basado en Symfony 4.4
 
 ## Requisitos
-*Composer
-*MySQL Server
+* Composer
+* MySQL Server
 
 ## Instalación
 
@@ -36,10 +36,10 @@ a) Crear un fichero llamado `.env.local` en la raiz de la aplicación con el sig
 
 `DATABASE_URL=mysql://dbuser:dbpass@dbhost:dbport/dbname`
 
-*dbuser: Nombre del usuario de la base de datos
-*dbpass: Contraseña de la base de datos
-*dbhost: Dirección de la base de datos
-*dbname: Nombre de la base de datos
+* **dbuser**: Nombre del usuario de la base de datos
+* **dbpass**: Contraseña de la base de datos
+* **dbhost**: Dirección de la base de datos
+* **dbname**: Nombre de la base de datos
 
 
 b) Crear scheme de base de datos
@@ -63,7 +63,7 @@ La contraseña se codifica mediante el algoritmo bcrypt
 
 `php bin/console server:run [ipserver][port]`
 
-*ipserver: Dirección ip del servidor
-*port: Número de puerto
+* **ipserver**: Dirección ip del servidor
+* **port**: Número de puerto
 
 
